@@ -1,0 +1,19 @@
+{
+    "collectDomain": "",
+    "crashDetection": "true",
+    "customUserAgent": "",
+    "privacyDefaultMode": "optin",
+    "ignoreLimitedAdTracking": "false",
+    "offlineEncryptionMode": "ifCompatible",
+    "offlineSendInterval": "500",
+    "offlineStorageMode": "required",
+    "path": "event",
+    "sendEventWhenOptout": "true",
+    "sessionBackgroundDuration": "30",
+    "site": "",
+    "storageLifetimePrivacy": "395",
+    "storageLifetimeUser": "395",
+    "storageLifetimeVisitor": "395",
+    "visitorStorageMode": "fixed",
+    "visitorIdType": "uuid"
+}

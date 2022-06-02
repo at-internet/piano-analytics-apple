@@ -1,0 +1,9 @@
+disabled_rules:
+  - identifier_name
+  - line_length
+  - type_name
+  - cyclomatic_complexity
+  - type_body_length
+  - force_cast
+  - file_length
+  - nesting
