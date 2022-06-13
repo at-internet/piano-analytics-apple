@@ -73,6 +73,30 @@ final class LifecycleStep: Step {
     private final var sessionBackgroundDuration: Int?
 
     private init(ps: PrivacyStep) {
+        let oldStorageKeyWithNew: [ATLifeCycleKeys: LifeCycleKeys] = [
+            ATLifeCycleKeys.FirstInitLifecycleDone: LifeCycleKeys.FirstInitLifecycleDone,
+            ATLifeCycleKeys.InitLifecycleDone: LifeCycleKeys.InitLifecycleDone,
+            ATLifeCycleKeys.FirstSession: LifeCycleKeys.FirstSession,
+            ATLifeCycleKeys.FirstSessionAfterUpdate: LifeCycleKeys.FirstSessionAfterUpdate,
+            ATLifeCycleKeys.LastSessionDate: LifeCycleKeys.LastSessionDate,
+            ATLifeCycleKeys.FirstSessionDate: LifeCycleKeys.FirstSessionDate,
+            ATLifeCycleKeys.SessionCount: LifeCycleKeys.SessionCount,
+            ATLifeCycleKeys.LastApplicationVersion: LifeCycleKeys.LastApplicationVersion,
+            ATLifeCycleKeys.FirstSessionDateAfterUpdate: LifeCycleKeys.FirstSessionDateAfterUpdate,
+            ATLifeCycleKeys.SessionCountSinceUpdate: LifeCycleKeys.SessionCountSinceUpdate,
+            ATLifeCycleKeys.DaysSinceFirstSession: LifeCycleKeys.DaysSinceFirstSession,
+            ATLifeCycleKeys.DaysSinceUpdate: LifeCycleKeys.DaysSinceUpdate,
+            ATLifeCycleKeys.DaysSinceLastSession: LifeCycleKeys.DaysSinceLastSession
+        ]
+        for (oldStorageKey, newStorageKey) in oldStorageKeyWithNew {
+            if (UserDefaults.standard.value(forKey: newStorageKey.rawValue) == nil) {
+                if let oldValue = UserDefaults.standard.value(forKey: oldStorageKey.rawValue) {
+                    UserDefaults.standard.set(oldValue, forKey: newStorageKey.rawValue)
+                    UserDefaults.standard.removeObject(forKey: oldStorageKey.rawValue)
+                }
+            }
+        }
+
         self.privacyStep = ps
         self.computingMetrics = [daysSinceFirstSession, daysSinceLastSession, daysSinceUpdate]
         let notificationCenter = NotificationCenter.default

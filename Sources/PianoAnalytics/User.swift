@@ -44,13 +44,13 @@ public final class User {
 
     init(_ obj: [String: String]?) {
         self.id = obj?[User.Id]
-        self.category = obj?[User.Category]
+        self.category = obj?[User.Category] != "" ? obj?[User.Category] : nil
     }
 
     final func toString() -> String {
         guard let jsonData = PianoAnalyticsUtils.toJSONData([
             User.Id: id,
-            User.Category: category
+            User.Category: category ?? ""
         ]) else {
             return ""
         }

@@ -42,6 +42,14 @@ final class UsersStep: Step {
     private var userRecognition: Bool = false
 
     init(_ ps: PrivacyStep) {
+        if (UserDefaults.standard.value(forKey: UserKeys.Users.rawValue) == nil) {
+            if let oldValue = UserDefaults.standard.value(forKey: ATUserKeys.Users.rawValue) {
+                UserDefaults.standard.set(oldValue, forKey: UserKeys.Users.rawValue)
+                UserDefaults.standard.set(Int64(Date().timeIntervalSince1970) * 1000, forKey: UserKeys.UserGenerationTimestamp.rawValue)
+                UserDefaults.standard.removeObject(forKey: ATUserKeys.Users.rawValue)
+            }
+        }
+
         self.privacyStep = ps
     }
 

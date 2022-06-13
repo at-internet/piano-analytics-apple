@@ -48,6 +48,21 @@ final class PrivacyStep: Step {
     private final let configurationStep: ConfigurationStep
 
     init(_ cs: ConfigurationStep) {
+        let oldStorageKeyWithNew: [ATPrivacyKeys: PrivacyKeys] = [
+            ATPrivacyKeys.PrivacyMode: PrivacyKeys.PrivacyMode,
+            ATPrivacyKeys.PrivacyModeExpirationTimestamp: PrivacyKeys.PrivacyModeExpirationTimestamp,
+            ATPrivacyKeys.PrivacyVisitorConsent: PrivacyKeys.PrivacyVisitorConsent,
+            ATPrivacyKeys.PrivacyVisitorId: PrivacyKeys.PrivacyVisitorId
+        ]
+        for (oldStorageKey, newStorageKey) in oldStorageKeyWithNew {
+            if (UserDefaults.standard.value(forKey: newStorageKey.rawValue) == nil) {
+                if let oldValue = UserDefaults.standard.value(forKey: oldStorageKey.rawValue) {
+                    UserDefaults.standard.set(oldValue, forKey: newStorageKey.rawValue)
+                    UserDefaults.standard.removeObject(forKey: oldStorageKey.rawValue)
+                }
+            }
+        }
+
         self.configurationStep = cs
     }
 

@@ -120,6 +120,20 @@ final class VisitorIDStep: Step {
     private final let privacyStep: PrivacyStep
 
     private init(ps: PrivacyStep) {
+        let oldStorageKeyWithNew: [ATVisitorIdKeys: VisitorIdKeys] = [
+            ATVisitorIdKeys.VisitorUUID: VisitorIdKeys.VisitorUUID,
+            ATVisitorIdKeys.VisitorUUIDGenerationTimestamp: VisitorIdKeys.VisitorUUIDGenerationTimestamp
+        ]
+        for (oldStorageKey, newStorageKey) in oldStorageKeyWithNew {
+            if (UserDefaults.standard.value(forKey: newStorageKey.rawValue) == nil) {
+                if let oldValue = UserDefaults.standard.value(forKey: oldStorageKey.rawValue) {
+                    UserDefaults.standard.set(oldValue, forKey: newStorageKey.rawValue)
+                    UserDefaults.standard.removeObject(forKey: oldStorageKey.rawValue)
+                }
+            }
+        }
+
+        
         self.privacyStep = ps
     }
 

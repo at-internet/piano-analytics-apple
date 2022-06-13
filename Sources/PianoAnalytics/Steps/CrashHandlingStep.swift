@@ -47,6 +47,19 @@ final class CrashHandlingStep: Step {
     private final var isCrashHandlingRegistered: Bool = false
 
     private init(ps: PrivacyStep) {
+        let oldStorageKeyWithNew: [ATCrashKeys: CrashKeys] = [
+            ATCrashKeys.Crashed: CrashKeys.Crashed,
+            ATCrashKeys.CrashInfo: CrashKeys.CrashInfo
+        ]
+        for (oldStorageKey, newStorageKey) in oldStorageKeyWithNew {
+            if (UserDefaults.standard.value(forKey: newStorageKey.rawValue) == nil) {
+                if let oldValue = UserDefaults.standard.value(forKey: oldStorageKey.rawValue) {
+                    UserDefaults.standard.set(oldValue, forKey: newStorageKey.rawValue)
+                    UserDefaults.standard.removeObject(forKey: oldStorageKey.rawValue)
+                }
+            }
+        }
+
         self.privacyStep = ps
         self.exceptionHandler = { exception in
             let userDefaults = UserDefaults.standard
