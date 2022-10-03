@@ -27,6 +27,10 @@ let package = Package(
         .testTarget(
             name: "PianoAnalyticsTests",
             dependencies: ["PianoAnalytics"]
+        ),
+        .testTarget(
+            name: "Piano Analytics Tests",
+            dependencies: ["PianoAnalytics"]
         )
     ],
     swiftLanguageVersions: [.v5]

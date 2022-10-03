@@ -319,7 +319,7 @@ public final class Configuration {
         if path == nil {
             // used to access the default.json file with SPM
             #if SPM
-            path = Bundle.module.url(forResource: PA.Configuration.Default, withExtension: PA.Configuration.Extension)?.absoluteString.deletePrefix("file://")
+            path = Bundle.module.path(forResource: PA.Configuration.Default, ofType: PA.Configuration.Extension)
             #endif
         }
         guard let path = path,
