@@ -163,6 +163,9 @@ public final class PianoAnalytics {
         queue.push(ProcessingType.UpdateContext, m: model, p: nil)
     }
 
+    /// The current sdk version
+    public static let sdkVersion = "3.0.1"
+
     // MARK: Privacy
 
     /// Update privacy mode
