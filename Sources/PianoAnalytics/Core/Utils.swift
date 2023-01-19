@@ -89,12 +89,12 @@ final class PianoAnalyticsUtils {
     #else
     static var connectionType: ConnectionType {
         get {
-            let reachability = Reachability.reachabilityForInternetConnection()
+            let reachability = PianoAnalytics.Reachability.reachabilityForInternetConnection()
 
             if let optReachability = reachability {
-                if optReachability.currentReachabilityStatus == Reachability.NetworkStatus.reachableViaWiFi {
+                if optReachability.currentReachabilityStatus == PianoAnalytics.Reachability.NetworkStatus.reachableViaWiFi {
                     return ConnectionType.Wifi
-                } else if optReachability.currentReachabilityStatus == Reachability.NetworkStatus.notReachable {
+                } else if optReachability.currentReachabilityStatus == PianoAnalytics.Reachability.NetworkStatus.notReachable {
                     return ConnectionType.Offline
                 } else {
                     #if os(iOS) && canImport(CoreTelephony)

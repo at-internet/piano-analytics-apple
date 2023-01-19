@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'PianoAnalytics-AppExtension'
-    s.version = '3.0.1'
+    s.version = '3.0.2'
     s.summary = 'Piano Analytics solution for extension Apple devices'
     s.homepage = 'https://github.com/at-internet/piano-analytics-apple'
     s.documentation_url = 'https://developers.atinternet-solutions.com/piano-analytics'
