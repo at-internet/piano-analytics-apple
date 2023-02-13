@@ -63,7 +63,7 @@ class ConfigurationTests: XCTestCase {
     }
 
     func testDefaultConfigurationBuilderInit() throws {
-//        let configuration = ConfigurationBuilder().build()
+				let pa = PianoAnalytics()
         let expectation = self.expectation(description: "Configuration")
         var defaultConfiguration: Configuration?
 
