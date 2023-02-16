@@ -29,9 +29,18 @@ final class SendStep: Step {
 
     // MARK: Constructors
 
-    static let shared: SendStep = SendStep()
+    private static var _instance: SendStep?
+    static let shared: ([AnyClass]?) -> SendStep = { pc in
+        if _instance == nil {
+            _instance = SendStep(urlSessionProtocolClasses: pc)
+        }
+        return _instance ?? SendStep(urlSessionProtocolClasses: pc)
+    }
 
-    private init() {
+    private final let urlSessionProtocolClasses: [AnyClass]?
+
+    private init(urlSessionProtocolClasses: [AnyClass]? = nil) {
+        self.urlSessionProtocolClasses = urlSessionProtocolClasses
     }
 
     // MARK: Constants
@@ -71,6 +80,7 @@ final class SendStep: Step {
 
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForResource = SendStep.TimeoutMs
+        sessionConfig.protocolClasses = urlSessionProtocolClasses
 
         var request = URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: SendStep.TimeoutMs)
         if userAgent != "" {

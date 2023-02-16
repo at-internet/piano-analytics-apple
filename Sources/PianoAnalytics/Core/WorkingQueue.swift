@@ -76,7 +76,7 @@ final class WorkingQueue {
         }
     ]
 
-    init(_ configFileLocation: String) {
+	init(_ configFileLocation: String, urlSessionProtocolClasses: [AnyClass]? = nil) {
         let cs = ConfigurationStep.shared(configFileLocation)
         let ps = PrivacyStep(cs)
         self.steps = [
@@ -92,7 +92,7 @@ final class WorkingQueue {
             BuildStep.shared,
             StorageStep.shared,
             OnBeforeSendCallStep.shared,
-            SendStep.shared
+            SendStep.shared(urlSessionProtocolClasses)
         ]
     }
 

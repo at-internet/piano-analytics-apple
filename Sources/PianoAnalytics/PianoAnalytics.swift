@@ -423,21 +423,22 @@ public final class PianoAnalytics {
     private static var _instance: PianoAnalytics?
 
     /// Simple default init
-    public static let shared: PianoAnalytics = sharedWithConfigurationFilePath(ConfigFile)
+    public static let shared: PianoAnalytics = sharedWithConfigurationFilePath(ConfigFile, nil)
 
-    /// Specific init with custom location configuration file
+    /// Specific init with custom location configuration file and optional url session protocol classes.
     ///
     /// - Parameter configFileLocation: file path from resources folder
-    public static let sharedWithConfigurationFilePath: (String) -> PianoAnalytics = { configFileLocation in
+    /// - Parameter urlSessionProtocolClasses: custom protocol classes to use for the url session configuration.
+    public static let sharedWithConfigurationFilePath: (String, [AnyClass]?) -> PianoAnalytics = { configFileLocation, protocolClasses in
         if _instance == nil {
-            _instance = PianoAnalytics(configFileLocation: configFileLocation)
+            _instance = PianoAnalytics(configFileLocation: configFileLocation, urlSessionProtocolClasses: protocolClasses)
         }
-        return _instance ?? PianoAnalytics(configFileLocation: configFileLocation)
+        return _instance ?? PianoAnalytics(configFileLocation: configFileLocation, urlSessionProtocolClasses: protocolClasses)
     }
 
     internal final let queue: WorkingQueue
 
-    init(configFileLocation: String) {
-        self.queue = WorkingQueue(configFileLocation)
+    init(configFileLocation: String, urlSessionProtocolClasses: [AnyClass]? = nil) {
+        self.queue = WorkingQueue(configFileLocation, urlSessionProtocolClasses: urlSessionProtocolClasses)
     }
 }
