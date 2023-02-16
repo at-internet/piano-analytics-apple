@@ -69,9 +69,6 @@ final class SendStep: Step {
             return
         }
 
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.timeoutIntervalForResource = SendStep.TimeoutMs
-
         var request = URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: SendStep.TimeoutMs)
         if userAgent != "" {
             request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
@@ -84,7 +81,7 @@ final class SendStep: Step {
 
         repeat {
             count += 1
-            let session = URLSession(configuration: sessionConfig)
+            let session = URLSession.shared
             let semaphore = DispatchSemaphore(value: 0)
 
             session.dataTask(with: request) {_, response, _ in
