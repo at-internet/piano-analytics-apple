@@ -88,7 +88,6 @@ final class SendStep: Step {
                 if let res = response as? HTTPURLResponse {
                     success = res.statusCode >= 200 && res.statusCode <= 399
                 }
-                session.finishTasksAndInvalidate()
                 semaphore.signal()
             }.resume()
 
