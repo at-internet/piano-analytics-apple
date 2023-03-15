@@ -358,7 +358,7 @@ public struct PA {
                     "device_timestamp_utc"
                 ]]
                 static let ForbiddenProperties: [String: Set<String>] = [:]
-                static let AllowedStorage: Set<String> = [PA.Privacy.Storage.Crash, PA.Privacy.Storage.Privacy, PA.Privacy.Storage.User]
+                static let AllowedStorage: Set<String> = [PA.Privacy.Storage.Crash, PA.Privacy.Storage.Privacy, PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]
             }
         }
 

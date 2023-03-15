@@ -213,7 +213,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -225,7 +225,6 @@
 				OBJ_53 /* README.md */,
 				OBJ_54 /* PianoAnalytics-AppExtension.podspec */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -239,14 +238,14 @@
 		OBJ_8 /* PianoAnalytics */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* default.json */,
 				OBJ_10 /* AVInsights */,
-				OBJ_12 /* Configuration.swift */,
 				OBJ_13 /* Core */,
+				OBJ_24 /* Steps */,
+				OBJ_12 /* Configuration.swift */,
+				OBJ_9 /* default.json */,
 				OBJ_21 /* Event.swift */,
 				OBJ_22 /* Model.swift */,
 				OBJ_23 /* PianoAnalytics.swift */,
-				OBJ_24 /* Steps */,
 				OBJ_38 /* User.swift */,
 			);
 			name = PianoAnalytics;
@@ -320,7 +319,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_48 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

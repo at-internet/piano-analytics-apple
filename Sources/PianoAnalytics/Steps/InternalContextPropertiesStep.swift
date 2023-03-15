@@ -74,7 +74,7 @@ final class InternalContextPropertiesStep: Step {
             ManufacturerProperty: Manufacturer,
             String(format: OsPropertiesFormat, "group"): osName,
             String(format: OsPropertiesFormat, "version"): osVersion,
-            String(format: OsPropertiesFormat, "name"): String(format: "%@ %@", osName, osVersion)
+            OsProperty: String(format: "%@ %@", osName, osVersion)
         ]
     }
 
@@ -116,14 +116,15 @@ final class InternalContextPropertiesStep: Step {
     static let DeviceScreenPropertiesFormat = "device_screen%@"
     static let DeviceScreenDiagonalProperty = String(format: DeviceScreenPropertiesFormat, "_diagonal")
     static let AppVersionProperty = "app_version"
-    static let ManufacturerProperty = "manufacturer"
-    static let ModelProperty = "model"
+    static let ManufacturerProperty = "device_manufacturer"
+    static let ModelProperty = "device_model"
+    static let OsProperty = "os"
     static let OsPropertiesFormat = "os_%@"
     static let EventCollectionPropertiesFormat = "event_collection_%@"
     static let BrowserLanguagePropertiesFormat = "browser_language%@"
 
     private static let Manufacturer = "Apple"
-    private static let EventCollectionVersion = "3.0.2"
+    private static let EventCollectionVersion = "3.0.3"
 
     #if os(tvOS)
     private static let Platform = "tvOS"
