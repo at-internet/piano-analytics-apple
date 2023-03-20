@@ -272,6 +272,8 @@ public struct PA {
                     "device_brand",
                     "device_display_height",
                     "device_display_width",
+                    "device_manufacturer",
+                    "device_model",
                     "device_name",
                     "device_name_tech",
                     "device_screen_diagonal",

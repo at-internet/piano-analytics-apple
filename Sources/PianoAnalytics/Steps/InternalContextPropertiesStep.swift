@@ -124,7 +124,7 @@ final class InternalContextPropertiesStep: Step {
     static let BrowserLanguagePropertiesFormat = "browser_language%@"
 
     private static let Manufacturer = "Apple"
-    private static let EventCollectionVersion = "3.0.3"
+    private static let EventCollectionVersion = "3.0.4"
 
     #if os(tvOS)
     private static let Platform = "tvOS"
