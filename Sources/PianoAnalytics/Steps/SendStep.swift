@@ -31,6 +31,10 @@ final class SendStep: Step {
 
     static let shared: SendStep = SendStep()
 
+    private lazy var sendStepWorkingQueue: DispatchQueue = {
+        DispatchQueue(label: "PianoSendStepWorkingQueue")
+    }()
+
     private init() {
     }
 
@@ -45,7 +49,7 @@ final class SendStep: Step {
     private final func sendStoredData(_ stored: [String: BuiltModel], userAgent: String, intervalInMs: Double) {
         for (index, data) in stored.enumerated() {
             let delay = Double(index) * (intervalInMs / 1000)
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            sendStepWorkingQueue.asyncAfter(deadline: .now() + delay) {
                 self.sendStoredChunk(data: data.value, userAgent: userAgent, key: data.key)
             }
         }
@@ -54,7 +58,7 @@ final class SendStep: Step {
     private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String) {
         self.send(data, userAgent: userAgent)
         do {
-            if let url = URL(string: key) {
+            if let url = URL(string: key), FileManager.default.fileExists(atPath: key) {
                 try FileManager.default.removeItem(at: url)
             }
         } catch {
