@@ -58,6 +58,8 @@ public final class AVMedia {
     fileprivate var autoBufferHeartbeat: Bool = false
     fileprivate var pa: PianoAnalytics
 
+    private var extraProperties: [String: Any]?
+
     fileprivate var _playbackSpeed = 1.0
     @objc public var playbackSpeed: Double {
         get {
@@ -93,6 +95,12 @@ public final class AVMedia {
             self._sessionId = optSessionId
         } else {
             self._sessionId = Foundation.UUID().uuidString
+        }
+    }
+
+    public func setExtraProperties(_ props: [String: Any]?) {
+        avSynchronizer.sync {
+            self.extraProperties = props
         }
     }
 
@@ -525,7 +533,7 @@ public final class AVMedia {
             } else {
                 heartbeatTimer = Timer.scheduledTimer(timeInterval: TimeInterval(MinHeartbeatDuration), target: self, selector: #selector(self.processAutoHeartbeat), userInfo: nil, repeats: false)
             }
-            self.pa.sendEvents([self.createEvent(name: "av.heartbeat", withOptions: true, extraProps: nil)], config: nil)
+            self.pa.sendEvents([self.createEvent(name: "av.heartbeat", withOptions: true, extraProps: extraProperties)], config: nil)
         }
     }
 
@@ -542,7 +550,7 @@ public final class AVMedia {
             } else {
                 heartbeatTimer = Timer.scheduledTimer(timeInterval: TimeInterval(MinBufferHeartbeatDuration), target: self, selector: #selector(self.processAutoBufferHeartbeat), userInfo: nil, repeats: false)
             }
-            self.pa.sendEvents([self.createEvent(name: "av.buffer.heartbeat", withOptions: true, extraProps: nil)], config: nil)
+            self.pa.sendEvents([self.createEvent(name: "av.buffer.heartbeat", withOptions: true, extraProps: extraProperties)], config: nil)
         }
     }
 
@@ -561,7 +569,7 @@ public final class AVMedia {
             } else {
                 heartbeatTimer = Timer.scheduledTimer(timeInterval: TimeInterval(MinBufferHeartbeatDuration), target: self, selector: #selector(self.processAutoRebufferHeartbeat), userInfo: nil, repeats: false)
             }
-            self.pa.sendEvents([self.createEvent(name: "av.rebuffer.heartbeat", withOptions: true, extraProps: nil)], config: nil)
+            self.pa.sendEvents([self.createEvent(name: "av.rebuffer.heartbeat", withOptions: true, extraProps: extraProperties)], config: nil)
         }
     }
 
