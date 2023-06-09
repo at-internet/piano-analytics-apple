@@ -58,7 +58,8 @@ final class SendStep: Step {
     private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String) {
         self.send(data, userAgent: userAgent)
         do {
-            if let url = URL(string: key), FileManager.default.fileExists(atPath: key) {
+            if let url = URL(string: key),
+               FileManager.default.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")) {
                 try FileManager.default.removeItem(at: url)
             }
         } catch {
