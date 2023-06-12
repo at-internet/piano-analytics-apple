@@ -76,6 +76,7 @@ final class SendStep: Step {
         if userAgent != "" {
             request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         }
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         request.httpBody = Data(body.utf8)
 
