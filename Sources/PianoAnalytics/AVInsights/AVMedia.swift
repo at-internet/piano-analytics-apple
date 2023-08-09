@@ -587,13 +587,14 @@ public final class AVMedia {
     }
     
     private func updateHeartbeat(previousDelay: Int, startTimerMillis: Int64, minHearbeatDuration: Int, heartbeatDurations: [Int:Int], selector: Selector) -> Int {
-            let minutesDelay = Int((Int64(Date().timeIntervalSince1970 * 1000) - startTimerMillis) / 60000)
-            let heartbeatDelay = max(heartbeatDurations[minutesDelay] ?? previousDelay, minHearbeatDuration)
-            
-            heartbeatTimer = Timer.scheduledTimer(timeInterval: TimeInterval(heartbeatDelay), target: self, selector: selector, userInfo: nil, repeats: false)
-        
-            return heartbeatDelay;
+        let minutesDelay = Int((Int64(Date().timeIntervalSince1970 * 1000) - startTimerMillis) / 60000)
+        let heartbeatDelay = max(heartbeatDurations[minutesDelay] ?? previousDelay, minHearbeatDuration)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.heartbeatTimer = Timer.scheduledTimer(timeInterval: TimeInterval(heartbeatDelay), target: self, selector: selector, userInfo: nil, repeats: false)
         }
+        return heartbeatDelay
+    }
 
     private func createSeekStart(oldCursorPosition: Int, extraProps: [String: Any]?) -> Event {
         self.previousCursorPositionMillis = self.currentCursorPositionMillis
