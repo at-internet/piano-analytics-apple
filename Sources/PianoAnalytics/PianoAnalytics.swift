@@ -45,6 +45,9 @@ public protocol PianoAnalyticsWorkProtocol {
 public final class PianoAnalytics {
 
     // MARK: PUBLIC SECTION
+    
+    /// SDK version
+    public static let sdkVersion = "3.0.5"
 
     /// Send event
     ///
