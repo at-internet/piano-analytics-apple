@@ -56,12 +56,16 @@ final class SendStep: Step {
     }
 
     private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String) {
+        let fileManager = FileManager.default
+
+        guard fileManager.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")),
+              let url = URL(string: key) else {
+            return
+        }
         self.send(data, userAgent: userAgent)
+
         do {
-            if let url = URL(string: key),
-               FileManager.default.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")) {
-                try FileManager.default.removeItem(at: url)
-            }
+            try FileManager.default.removeItem(at: url)
         } catch {
             print("PianoAnalytics: error on SendStep.sendStoredData: \(error)")
         }
