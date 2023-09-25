@@ -437,10 +437,25 @@ public final class PianoAnalytics {
         }
         return _instance ?? PianoAnalytics(configFileLocation: configFileLocation)
     }
-
+    
+    // Specific init with extended configuration
+    ///
+    /// - Parameter configFileLocation: file path from resources folder
+    public static let sharedWithExtendedConfiguration: (PA.ExtendedConfiguration) -> PianoAnalytics = { extendedConfiguration in
+        if _instance == nil {
+            _instance = PianoAnalytics(extendedConfiguration: extendedConfiguration)
+        }
+        return _instance ?? PianoAnalytics(extendedConfiguration: extendedConfiguration)
+    }
+    
     internal final let queue: WorkingQueue
 
     init(configFileLocation: String) {
-        self.queue = WorkingQueue(configFileLocation)
+        let extendedConfiguration = PA.ExtendedConfiguration(configFileLocation)
+        self.queue = WorkingQueue(extendedConfiguration)
+    }
+    
+    init(extendedConfiguration: PA.ExtendedConfiguration) {
+        self.queue = WorkingQueue(extendedConfiguration)
     }
 }

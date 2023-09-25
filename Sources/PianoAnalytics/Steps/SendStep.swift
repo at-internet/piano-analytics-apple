@@ -26,12 +26,25 @@
 import Foundation
 
 final class SendStep: Step {
+    
+    private lazy var sendStepWorkingQueue: DispatchQueue = {
+        DispatchQueue(label: "PianoSendStepWorkingQueue")
+    }()
 
     // MARK: Constructors
+    
+    private static var _instance: SendStep?
+    static let shared: (PA.ExtendedConfiguration) -> SendStep = { ec in
+        if _instance == nil {
+            _instance = SendStep(ec: ec)
+        }
+        return _instance ?? SendStep(ec: ec)
+    }
+    
+    private final let extendedConfiguration: PA.ExtendedConfiguration
 
-    static let shared: SendStep = SendStep()
-
-    private init() {
+    private init(ec: PA.ExtendedConfiguration) {
+        extendedConfiguration = ec
     }
 
     // MARK: Constants
@@ -45,7 +58,7 @@ final class SendStep: Step {
     private final func sendStoredData(_ stored: [String: BuiltModel], userAgent: String, intervalInMs: Double) {
         for (index, data) in stored.enumerated() {
             let delay = Double(index) * (intervalInMs / 1000)
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            sendStepWorkingQueue.asyncAfter(deadline: .now() + delay) {
                 self.sendStoredChunk(data: data.value, userAgent: userAgent, key: data.key)
             }
         }
@@ -54,7 +67,7 @@ final class SendStep: Step {
     private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String) {
         self.send(data, userAgent: userAgent)
         do {
-            if let url = URL(string: key) {
+            if let url = URL(string: key), FileManager.default.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")) {
                 try FileManager.default.removeItem(at: url)
             }
         } catch {
@@ -71,6 +84,8 @@ final class SendStep: Step {
 
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForResource = SendStep.TimeoutMs
+        
+        extendedConfiguration.configureURLSession?(sessionConfig)
 
         var request = URLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData, timeoutInterval: SendStep.TimeoutMs)
         if userAgent != "" {
@@ -84,7 +99,7 @@ final class SendStep: Step {
 
         repeat {
             count += 1
-            let session = URLSession(configuration: sessionConfig)
+            let session = extendedConfiguration.urlSession?() ?? URLSession(configuration: sessionConfig)
             let semaphore = DispatchSemaphore(value: 0)
 
             session.dataTask(with: request) {_, response, _ in

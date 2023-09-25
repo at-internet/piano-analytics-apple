@@ -76,8 +76,8 @@ final class WorkingQueue {
         }
     ]
 
-    init(_ configFileLocation: String) {
-        let cs = ConfigurationStep.shared(configFileLocation)
+    init(_ extendedConfiguration: PA.ExtendedConfiguration) {
+        let cs = ConfigurationStep.shared(extendedConfiguration.configFileLocation)
         let ps = PrivacyStep(cs)
         self.steps = [
             cs,
@@ -92,7 +92,7 @@ final class WorkingQueue {
             BuildStep.shared,
             StorageStep.shared,
             OnBeforeSendCallStep.shared,
-            SendStep.shared
+            SendStep.shared(extendedConfiguration)
         ]
     }
 

@@ -197,7 +197,7 @@ final class LifecycleStep: Step {
             "app_sessionid": ContextProperty(value: self.sessionId ?? "")
         ] as [String: ContextProperty]
 
-        if let fsd = ud.object(forKey: LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue) as? Date {
+        if let fsd = ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date {
             m["app_fsd"] = ContextProperty(value: self.lifecycleDateFormatter.string(from: fsd))
         }
 

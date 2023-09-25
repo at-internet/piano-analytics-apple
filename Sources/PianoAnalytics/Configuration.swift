@@ -79,6 +79,79 @@ public final class ConfigurationBuilder {
     public init() {
 
     }
+    
+    public init(parameters: [String:Any]) {
+        for (rawKey, rawValue) in parameters {
+            guard let key = ConfigurationKey(rawValue: rawKey) else {
+                continue
+            }
+            switch key {
+                case .CollectDomain:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withCollectDomain(stringValue)
+                case .CrashDetection:
+                    if let boolValue = rawValue as? Bool ?? Bool(String(describing: rawValue)) {
+                        _ = self.enableCrashDetection(boolValue)
+                    }
+                case .CustomUserAgent:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withCustomUserAgent(stringValue)
+                case .PrivacyDefaultMode:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withPrivacyDefaultMode(stringValue)
+                case .IgnoreLimitedAdTracking:
+                    if let boolValue = rawValue as? Bool ?? Bool(String(describing: rawValue)) {
+                        _ = self.enableIgnoreLimitedAdTracking(boolValue)
+                    }
+                case .OfflineEncryptionMode:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withOfflineEncryptionMode(stringValue)
+                case .OfflineSendInterval:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withOfflineSendInterval(intValue)
+                    }
+                case .OfflineStorageMode:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withOfflineStorageMode(stringValue)
+                case .Path:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withPath(stringValue)
+                case .SendEventWhenOptout:
+                    if let boolValue = rawValue as? Bool ?? Bool(String(describing: rawValue)) {
+                        _ = self.enableSendEventWhenOptout(boolValue)
+                    }
+                case .SessionBackgroundDuration:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withSessionBackgroundDuration(intValue)
+                    }
+                case .Site:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withSite(intValue)
+                    }
+                case .StorageLifetimePrivacy:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withStorageLifetimePrivacy(intValue)
+                    }
+                case .StorageLifetimeUser:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withStorageLifetimeUser(intValue)
+                    }
+                case .StorageLifetimeVisitor:
+                    if let intValue = rawValue as? Int ?? Int(String(describing: rawValue)) {
+                        _ = self.withStorageLifetimeVisitor(intValue)
+                    }
+                case .VisitorStorageMode:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withVisitorStorageMode(stringValue)
+                case .VisitorIdType:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withVisitorIdType(stringValue)
+                case .VisitorId:
+                    let stringValue = rawValue as? String ?? String(describing: rawValue)
+                    _ = self.withVisitorID(stringValue)
+            }
+        }
+    }
 
     // MARK: PUBLIC SECTION
 
