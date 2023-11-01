@@ -37,7 +37,7 @@ final class CrashHandlingStep: Step {
         return _instance ?? CrashHandlingStep(ps: ps)
     }
 
-    private static let defaultHandler : (@convention(c) (NSException) -> Swift.Void)? = NSGetUncaughtExceptionHandler()
+    private static var defaultHandler : (@convention(c) (NSException) -> Swift.Void)? = nil
     private final let exceptionHandler : (@convention(c) (NSException) -> Swift.Void)?
     private final let signalHandler : (@convention(c) (Int32) -> Swift.Void)
     private final let privacyStep: PrivacyStep
@@ -58,6 +58,10 @@ final class CrashHandlingStep: Step {
                     UserDefaults.standard.removeObject(forKey: oldStorageKey.rawValue)
                 }
             }
+        }
+        
+        if CrashHandlingStep.defaultHandler == nil {
+            CrashHandlingStep.defaultHandler = NSGetUncaughtExceptionHandler()
         }
 
         self.privacyStep = ps
