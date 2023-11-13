@@ -94,7 +94,12 @@ final class StorageStep: Step {
                 let content = try String(contentsOf: f)
                 if let data = Crypt.decrypt(data: content) {
                     if let map = PianoAnalyticsUtils.fromJSONData(Data(data.utf8)) {
-                        storedData[f.absoluteString] = BuiltModel(uri: map[StorageStep.UriField], body: map[StorageStep.BodyField], mustBeSaved: false)
+                        storedData[f.absoluteString] = BuiltModel(
+                            uri: map[StorageStep.UriField],
+                            body: map[StorageStep.BodyField],
+                            chunks: nil,
+                            mustBeSaved: false
+                        )
                     }
                 }
             }
@@ -148,20 +153,26 @@ final class StorageStep: Step {
         let conf = m.configuration
         let encryptionMode = EncryptionMode.init(rawValue: conf.get(ConfigurationKey.OfflineEncryptionMode)) ?? EncryptionMode.IfCompatible
 
-        if let builtModel = m.builtModel, builtModel.mustBeSaved {
-            guard let jsonData = PianoAnalyticsUtils.toJSONData([
-                StorageStep.UriField: builtModel.uri,
-                StorageStep.BodyField: builtModel.body
-            ]) else {
+        if let builtModel = m.builtModel {
+            if let chunks = builtModel.chunks {
+                chunks.forEach { chunk in
+                    guard let jsonData = PianoAnalyticsUtils.toJSONData([
+                        StorageStep.UriField: builtModel.uri,
+                        StorageStep.BodyField: chunk
+                    ]) else {
+                        return
+                    }
+                    self.storeData(String(decoding: jsonData, as: UTF8.self), encryptionMode: encryptionMode)
+                }
+            }
+            
+            if builtModel.mustBeSaved {
                 return false
             }
-            self.storeData(String(decoding: jsonData, as: UTF8.self), encryptionMode: encryptionMode)
-            return false
         }
 
         /// Retrieve stored data
         m.storage = self.readData()
         return true
-
     }
 }

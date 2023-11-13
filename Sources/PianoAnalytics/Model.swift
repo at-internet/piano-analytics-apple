@@ -65,11 +65,13 @@ public final class BuiltModel {
 
     public final let uri: String?
     public final let body: String?
+    public final let chunks: [String]?
     final let mustBeSaved: Bool
 
-    init(uri: String?, body: String?, mustBeSaved: Bool) {
+    init(uri: String?, body: String?, chunks: [String]?, mustBeSaved: Bool) {
         self.uri = uri
         self.body = body
+        self.chunks = chunks
         self.mustBeSaved = mustBeSaved
     }
 }

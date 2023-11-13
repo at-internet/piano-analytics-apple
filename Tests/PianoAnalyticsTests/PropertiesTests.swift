@@ -41,8 +41,17 @@ class TestProtocol: PianoAnalyticsWorkProtocol {
     }
 
     func onBeforeSend(built: BuiltModel?, stored: [String: BuiltModel]?) -> Bool {
-        builtModel = built
-        completionHandler(built, stored)
+        do {
+            try stored?.forEach { key, _ in
+                if let url = URL(string: key), FileManager.default.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")) {
+                    try FileManager.default.removeItem(at: url)
+                }
+            }
+        } catch {}
+        
+        builtModel = stored?.first?.value
+        completionHandler(builtModel, stored)
+        
         return false
     }
 }
@@ -156,9 +165,11 @@ class PropertiesTests: XCTestCase {
         self.pa.sendEvent(Event("another", data: [:]), config: nil, p: TestProtocol { built, _ in
             localBuilt1 = built
         })
+        self.pa.deleteOfflineData()
         self.pa.sendEvent(Event("toto", data: [:]), config: nil, p: TestProtocol { built, _ in
             localBuilt2 = built
         })
+        self.pa.deleteOfflineData()
         self.pa.sendEvent(Event("tata", data: [:]), config: nil, p: TestProtocol { built, _ in
             localBuilt3 = built
             expectation.fulfill()
