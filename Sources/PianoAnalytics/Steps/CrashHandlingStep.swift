@@ -144,6 +144,10 @@ final class CrashHandlingStep: Step {
     // MARK: Step Implementation
 
     func processSetConfig(m: inout Model) {
+        if #available(watchOS 1.0, *) {
+            return
+        }
+        
         /// REQUIREMENTS
         let conf = m.configuration
 
