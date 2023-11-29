@@ -38,6 +38,7 @@ final class BuildStep: Step {
 
     private static let RequestUriFormat = "https://%@%@?s=%@&idclient=%@"
     private static let EventsField = "events"
+    private static let ChunkSize = 50
 
     // MARK: Step Implementation
 
@@ -55,12 +56,15 @@ final class BuildStep: Step {
             contextProperties[InternalContextPropertiesStep.ConnectionTypeProperty] = ContextProperty(value: ConnectionType.Offline.rawValue)
             mustBeSaved = true
         }
-
-        /// BODY
-        let body = PianoAnalyticsUtils.toJSONData([
-            // TODO
-            BuildStep.EventsField: events.map {$0.toMap(context: [:])}
-        ]) ?? Data()
+        
+        var chunks: [String] = []
+        stride(from: 0, to: m.events.count, by: BuildStep.ChunkSize).forEach { i in
+            if let chunk = PianoAnalyticsUtils.toJSONData([
+                BuildStep.EventsField: events[i..<min(i + BuildStep.ChunkSize, m.events.count)].map {$0.toMap(context: [:])}
+            ]) {
+                chunks.append(String(decoding: chunk, as: UTF8.self))
+            }
+        }
 
         /// URI
         let visitorId = conf.get(ConfigurationKey.VisitorId)
@@ -70,7 +74,12 @@ final class BuildStep: Step {
                          conf.get(ConfigurationKey.Site),
                          visitorId)
 
-        m.builtModel = BuiltModel(uri: uri, body: String(decoding: body, as: UTF8.self), mustBeSaved: mustBeSaved)
+        m.builtModel = BuiltModel(
+            uri: uri,
+            body: nil,
+            chunks: chunks,
+            mustBeSaved: mustBeSaved
+        )
         return true
 
     }

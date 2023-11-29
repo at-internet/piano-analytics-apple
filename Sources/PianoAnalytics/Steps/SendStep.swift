@@ -133,19 +133,6 @@ final class SendStep: Step {
     }
 
     func processSendEvents(m: inout Model, p: PianoAnalyticsWorkProtocol?) -> Bool {
-        /// REQUIREMENTS
-        let conf = m.configuration
-        let stored = m.storage
-
-        guard let buildModel = m.builtModel else {
-            return false
-        }
-
-        let userAgent = conf.get(ConfigurationKey.CustomUserAgent)
-        let offlineSendInterval = Double(conf.get(ConfigurationKey.OfflineSendInterval).toInt())
-        self.sendStoredData(stored, userAgent: userAgent, intervalInMs: offlineSendInterval)
-        self.send(buildModel, userAgent: userAgent)
-
-        return true
+        return processSendOfflineData(m: &m, p: p)
     }
 }
