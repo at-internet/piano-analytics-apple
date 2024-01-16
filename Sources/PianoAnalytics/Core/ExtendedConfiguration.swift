@@ -14,11 +14,11 @@ extension PA {
         /// Configuration file location
         internal let configFileLocation: String
         
-        init(_ configFileLocation: String) {
+        public init(_ configFileLocation: String) {
             self.configFileLocation = configFileLocation
         }
         
-        init() {
+        public init() {
             self.configFileLocation = Configuration.Location
         }
     }

@@ -58,14 +58,14 @@ final class SendStep: Step {
     private final func sendStoredData(_ stored: [String: BuiltModel], userAgent: String, intervalInMs: Double) {
         for (index, data) in stored.enumerated() {
             let delay = Double(index) * (intervalInMs / 1000)
-            sendStepWorkingQueue.asyncAfter(deadline: .now() + delay) {
-                self.sendStoredChunk(data: data.value, userAgent: userAgent, key: data.key)
-            }
+            self.sendStoredChunk(data: data.value, userAgent: userAgent, key: data.key, delay: delay)
         }
     }
 
-    private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String) {
-        self.send(data, userAgent: userAgent)
+    private final func sendStoredChunk(data: BuiltModel, userAgent: String, key: String, delay: Double) {
+        sendStepWorkingQueue.asyncAfter(deadline: .now() + delay) {
+            self.send(data, userAgent: userAgent)
+        }
         do {
             if let url = URL(string: key), FileManager.default.fileExists(atPath: key.replacingOccurrences(of: "file://", with: "")) {
                 try FileManager.default.removeItem(at: url)
