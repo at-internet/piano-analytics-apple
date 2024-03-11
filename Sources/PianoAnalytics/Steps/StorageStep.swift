@@ -78,7 +78,11 @@ final class StorageStep: Step {
 
     private final func readData() -> [String: BuiltModel] {
         let fileManager = FileManager.default
+        #if os(tvOS)
+        let url = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        #else
         let url = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        #endif
         var storedData = [String: BuiltModel]()
 
         do {
