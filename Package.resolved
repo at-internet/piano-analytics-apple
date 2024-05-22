@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PianoConsents",
+        "repositoryURL": "https://gitlab.com/piano-public/sdk/ios/packages/consents",
+        "state": {
+          "branch": null,
+          "revision": "173b551a06721b7d3a6d2abbe07981e7782e3831",
+          "version": "1.0.6"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
