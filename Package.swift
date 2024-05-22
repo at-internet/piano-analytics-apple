@@ -18,7 +18,7 @@ let package = Package(
         .target(
             name: "PianoAnalytics",
             resources: [
-                .process("default.json")
+                .process("Resources")
             ],
             swiftSettings: [
               .define("SPM")
