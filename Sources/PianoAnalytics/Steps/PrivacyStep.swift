@@ -25,6 +25,8 @@
 
 import Foundation
 
+import PianoConsents
+
 final class PrivacyStep: Step {
 
     // MARK: Constructors
@@ -192,7 +194,7 @@ final class PrivacyStep: Step {
 
         let userDefaults = UserDefaults.standard
         let storageLifetimePrivacy = configurationStep.getConfigurationValue(key: ConfigurationKey.StorageLifetimePrivacy).toInt()
-        let defaultMode = configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
+        let defaultMode = getConsentsMode() ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
 
         if let privacyModeExpirationTs = userDefaults.object(forKey: PrivacyKeys.PrivacyModeExpirationTimestamp.rawValue) as? Int64 {
             if Int64(Date().timeIntervalSince1970 * 1000) >= privacyModeExpirationTs {
@@ -204,6 +206,15 @@ final class PrivacyStep: Step {
             }
         }
         return userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue) ?? defaultMode
+    }
+    
+    private final func getConsentsMode() -> String? {
+        if PianoConsents.shared.configuration.requireConsents,
+           let purpose = PianoConsents.shared.purposesByProduct.first(where: { $0.key == .PA })?.value,
+           let consent = PianoConsents.shared.consents.first(where: { $0.key == purpose })?.value {
+            return consent.mode.toString()
+        }
+        return nil
     }
 
     final func isAuthorizedEventName(_ eventName: String, authorizedEventNames: Set<String>, forbiddenEventNames: Set<String>) -> Bool {
@@ -521,5 +532,18 @@ final class PrivacyStep: Step {
         m.contextProperties = contextProperties
         m.events = resultEvents
         return true
+    }
+}
+
+fileprivate extension PianoConsentMode {
+    func toString() -> String? {
+        switch self {
+        case .OPT_IN: return PA.Privacy.Mode.OptIn.Name
+        case .ESSENTIAL: return PA.Privacy.Mode.Exempt.Name
+        case .OPT_OUT: return PA.Privacy.Mode.OptOut.Name
+        case .NOT_ACQUIRED: return PA.Privacy.Mode.NoConsent.Name
+        case .CUSTOM: return "custom"
+        default: return nil
+        }
     }
 }

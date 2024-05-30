@@ -19,6 +19,9 @@ let package = Package(
     targets: [
         .target(
             name: "PianoAnalytics",
+            dependencies: [
+                .product(name: "PianoConsents", package: "consents")
+            ],
             resources: [
                 .process("Resources")
             ],
