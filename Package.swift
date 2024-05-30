@@ -31,7 +31,10 @@ let package = Package(
         ),
         .testTarget(
             name: "PianoAnalyticsTests",
-            dependencies: ["PianoAnalytics"]
+            dependencies: [
+                "PianoAnalytics",
+                .product(name: "PianoConsents", package: "consents")
+            ]
         )
     ],
     swiftLanguageVersions: [.v5]
