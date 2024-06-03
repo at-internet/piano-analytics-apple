@@ -25,7 +25,10 @@
 //
 
 import XCTest
+
 @testable import PianoAnalytics
+
+import PianoConsents
 
 class PrivacyTests: XCTestCase {
 
@@ -274,6 +277,7 @@ class PrivacyTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        PianoConsents.initialize(configuration: .init())
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
@@ -1789,6 +1793,37 @@ class PrivacyTests: XCTestCase {
 
         forbiddenEvents = ["test.event"]
         XCTAssertFalse(privacyStep.isAuthorizedEventName(eventName, authorizedEventNames: authorizedEvents, forbiddenEventNames: forbiddenEvents))
+    }
+    
+    func testPianoConsents() throws {
+        PianoConsents.initialize(configuration: .init(requireConsents: true))
+        try PianoConsents.shared.set(purpose: .AUDIENCE_MEASUREMENT, mode: .OPT_OUT, products: .PA)
+        
+        var expectation = self.expectation(description: "Privacy configuration")
+        var mode: String? = nil
+        self.pa.getModel { model in
+            mode = model.privacyModel?.visitorMode
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        
+        XCTAssertNotNil(mode)
+        XCTAssertEqual(PA.Privacy.Mode.OptOut.Name, mode)
+        
+        pa.privacySetMode(PA.Privacy.Mode.OptIn.Name)
+        
+        expectation = self.expectation(description: "Privacy configuration 2")
+        mode = nil
+        self.pa.getModel { model in
+            mode = model.privacyModel?.visitorMode
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+        
+        XCTAssertNotNil(mode)
+        XCTAssertEqual(PA.Privacy.Mode.OptIn.Name, mode)
     }
 
 }

@@ -25,6 +25,8 @@
 
 import Foundation
 
+import PianoConsents
+
 struct PrivacyModeProperties {
     var allowed: [String: Set<String>]
     var forbidden: [String: Set<String>]

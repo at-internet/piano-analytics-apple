@@ -47,7 +47,7 @@ public final class PianoAnalytics {
     // MARK: PUBLIC SECTION
     
     /// SDK version
-    public static let sdkVersion = "3.0.10"
+    public static let sdkVersion = "3.1.0"
 
     /// Send event
     ///

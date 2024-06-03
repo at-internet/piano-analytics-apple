@@ -34,22 +34,22 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
 1. Update your Podfile with the according line(s)  
     ```sh
     # iOS Application
-    pod "PianoAnalytics/iOS", ">=3.0"
+    pod "PianoAnalytics/iOS", ">=3.1"
     
     # tvOS Application
-    pod "PianoAnalytics/tvOS", ">=3.0"
+    pod "PianoAnalytics/tvOS", ">=3.1"
     
     # watchOS Application
-    pod "PianoAnalytics/watchOS", ">=3.0"
+    pod "PianoAnalytics/watchOS", ">=3.1"
     
     # iOS Application
-    pod "PianoAnalytics/appExtension", ">=3.0"
+    pod "PianoAnalytics/appExtension", ">=3.1"
     ```
     
     To avoid conflicts caused by [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues/8206), it's possible to use an independent pod:
     ```sh
     target 'MyProject' do
-        pod "PianoAnalytics-AppExtension", ">=3.0"
+        pod "PianoAnalytics-AppExtension", ">=3.1"
         use_frameworks!
     end
     ```
@@ -57,7 +57,7 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
     If you do not have any other pods, your Podfile should look something like:
     ```sh
     target 'MyProject' do
-        pod "PianoAnalytics/iOS", ">=3.0"
+        pod "PianoAnalytics/iOS", ">=3.1"
         use_frameworks!
     end
     ```
@@ -84,7 +84,7 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
 
 1. Update the Cartfile with the following line: 
     ```swift
-    github "at-internet/piano-analytics-apple" ~> 3.0 
+    github "at-internet/piano-analytics-apple" ~> 3.1
     ```
 2. Save your Cartfile
 
