@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DAT_EXTENSION' }
     s.source_files = 'Sources/**/*.swift'
     s.resource = 'Sources/PianoAnalytics/Resources/*'
-    s.dependency 'PianoConsents', "~> 1.0.6"
+    s.dependency 'PianoConsents', "~> 1.0.7"
     s.platform = :ios, '10.0'
     s.swift_versions = '5'
 end

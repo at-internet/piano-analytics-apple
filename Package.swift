@@ -14,7 +14,7 @@ let package = Package(
         .library(name: "PianoAnalytics", targets: ["PianoAnalytics"])
     ],
     dependencies: [
-        .package(url: "https://gitlab.com/piano-public/sdk/ios/packages/consents", .upToNextMinor(from: "1.0.6")),
+        .package(url: "https://gitlab.com/piano-public/sdk/ios/packages/consents", .upToNextMinor(from: "1.0.7")),
     ],
     targets: [
         .target(
