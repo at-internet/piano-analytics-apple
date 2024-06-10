@@ -4,6 +4,12 @@
 <dict>
 	<key>NSPrivacyTracking</key>
 	<true/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array>
+		<string>pa-cd.com</string>
+		<string>xiti.com</string>
+		<string>ati-host.net</string>
+	</array>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
 		<dict>

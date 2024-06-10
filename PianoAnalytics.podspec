@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'PianoAnalytics'
-    s.version = '3.1.0'
+    s.version = '3.1.1'
     s.summary = 'Piano Analytics library for Apple devices'
     s.homepage = 'https://github.com/at-internet/piano-analytics-apple'
     s.documentation_url = 'https://developers.atinternet-solutions.com/piano-analytics'
