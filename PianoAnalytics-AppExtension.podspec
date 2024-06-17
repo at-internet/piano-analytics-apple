@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DAT_EXTENSION' }
     s.source_files = 'Sources/**/*.swift'
     s.resource_bundle = {
-        "PianoAnalyticsAppExtension" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+        "PianoAnalyticsAppExtension" => ["Sources/PianoAnalytics/Resources/*.xcprivacy"]
     }
     s.resource = 'Sources/PianoAnalytics/Resources/*.json'
     s.dependency 'PianoConsents', "~> 1.0.7"
