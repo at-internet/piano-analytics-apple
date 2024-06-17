@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'PianoAnalytics-AppExtension'
-    s.version = '3.1.1'
+    s.version = '3.1.2'
     s.summary = 'Piano Analytics solution for extension Apple devices'
     s.homepage = 'https://github.com/at-internet/piano-analytics-apple'
     s.documentation_url = 'https://developers.atinternet-solutions.com/piano-analytics'
@@ -12,7 +12,10 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '10.0'
     s.pod_target_xcconfig = { 'OTHER_SWIFT_FLAGS' => '-DAT_EXTENSION' }
     s.source_files = 'Sources/**/*.swift'
-    s.resource = 'Sources/PianoAnalytics/Resources/*'
+    s.resource_bundle = {
+        "PianoAnalytics" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+    }
+    s.resource = 'Sources/PianoAnalytics/Resources/*.json'
     s.dependency 'PianoConsents', "~> 1.0.7"
     s.platform = :ios, '10.0'
     s.swift_versions = '5'
