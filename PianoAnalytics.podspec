@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
         d.source_files = 'Sources/**/*.swift'
         d.platform = :ios
         d.resource_bundle = {
-            "PianoAnalytics" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_iOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
         }
         d.resource = 'Sources/PianoAnalytics/Resources/*.json'
     end
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
         appExt.source_files = 'Sources/**/*.swift'
         appExt.platform = :ios
         appExt.resource_bundle = {
-            "PianoAnalytics" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_appExtension" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
         }
         appExt.resource = 'Sources/PianoAnalytics/Resources/*.json'
     end
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
         wos.source_files = 'Sources/**/*.swift'
         wos.platform = :watchos
         wos.resource_bundle = {
-            "PianoAnalytics" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_watchOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
         }
         wos.resource = 'Sources/PianoAnalytics/Resources/*.json'
     end
@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
         tvos.source_files = 'Sources/**/*.swift'
         tvos.platform = :tvos
         tvos.resource_bundle = {
-            "PianoAnalytics" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_tvOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
         }
         tvos.resource = 'Sources/PianoAnalytics/Resources/*.json'
     end
