@@ -19,9 +19,9 @@ Pod::Spec.new do |s|
         d.source_files = 'Sources/**/*.swift'
         d.platform = :ios
         d.resource_bundle = {
-            "PianoAnalytics_iOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_iOS" => ["Sources/Resources/PianoAnalytics/PrivacyInfo.xcprivacy"]
         }
-        d.resource = 'Sources/PianoAnalytics/Resources/*.json'
+        d.resource = 'Sources/PianoAnalytics/Resources/default.json'
     end
 
     s.subspec 'appExtension' do |appExt|
@@ -29,26 +29,26 @@ Pod::Spec.new do |s|
         appExt.source_files = 'Sources/**/*.swift'
         appExt.platform = :ios
         appExt.resource_bundle = {
-            "PianoAnalytics_appExtension" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_appExtension" => ["Sources/Resources/PianoAnalytics/PrivacyInfo.xcprivacy"]
         }
-        appExt.resource = 'Sources/PianoAnalytics/Resources/*.json'
+        appExt.resource = 'Sources/PianoAnalytics/Resources/default.json'
     end
 
     s.subspec 'watchOS' do |wos|
         wos.source_files = 'Sources/**/*.swift'
         wos.platform = :watchos
         wos.resource_bundle = {
-            "PianoAnalytics_watchOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_watchOS" => ["Sources/Resources/PianoAnalytics/PrivacyInfo.xcprivacy"]
         }
-        wos.resource = 'Sources/PianoAnalytics/Resources/*.json'
+        wos.resource = 'Sources/PianoAnalytics/Resources/default.json'
     end
 
     s.subspec 'tvOS' do |tvos|
         tvos.source_files = 'Sources/**/*.swift'
         tvos.platform = :tvos
         tvos.resource_bundle = {
-            "PianoAnalytics_tvOS" => ["Sources/Resources/PianoAnalytics/*.xcprivacy"]
+            "PianoAnalytics_tvOS" => ["Sources/Resources/PianoAnalytics/PrivacyInfo.xcprivacy"]
         }
-        tvos.resource = 'Sources/PianoAnalytics/Resources/*.json'
+        tvos.resource = 'Sources/PianoAnalytics/Resources/default.json'
     end
 end
