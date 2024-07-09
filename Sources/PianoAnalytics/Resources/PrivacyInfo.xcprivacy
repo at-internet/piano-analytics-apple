@@ -3,13 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSPrivacyTracking</key>
-	<true/>
-	<key>NSPrivacyTrackingDomains</key>
-	<array>
-		<string>pa-cd.com</string>
-		<string>xiti.com</string>
-		<string>ati-host.net</string>
-	</array>
+	<false/>
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array>
 		<dict>
