@@ -47,7 +47,7 @@ public final class PianoAnalytics {
     // MARK: PUBLIC SECTION
     
     /// SDK version
-    public static let sdkVersion = "3.1.4"
+    public static let sdkVersion = "3.1.5"
 
     /// Send event
     ///
@@ -76,7 +76,7 @@ public final class PianoAnalytics {
 
         queue.push(ProcessingType.SendEvents, m: m, p: p)
     }
-
+    
     /// Get configuration
     ///
     /// - Parameter key: configuration key to get

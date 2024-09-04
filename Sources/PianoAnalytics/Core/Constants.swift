@@ -62,6 +62,94 @@ public struct PA {
         static let Default = "default"
         static let Extension = "json"
     }
+    
+    public struct EventName {
+        
+        public struct Page {
+            static let Display = "page.display"
+        }
+        
+        public struct Click {
+            static let Action = "click.action"
+            static let Navigation = "click.navigation"
+            static let Exit = "click.exit"
+            static let Download = "click.download"
+        }
+        
+        public struct Publisher {
+            static let Impression = "publisher.impression"
+            static let Click = "publisher.click"
+        }
+        
+        public struct SelfPromotion {
+            static let Impression = "self_promotion.impression"
+            static let Click = "self_promotion.click"
+        }
+        
+        public struct InternalSearchResult {
+            static let Display = "internal_search_result.display"
+            static let Click = "internal_search_result.click"
+        }
+        
+        public struct MvTest {
+            static let Display = "mv_test.display"
+        }
+    }
+    
+    public enum PropertyType: String {
+        case bool = "b"
+        case int = "n"
+        case float = "f"
+        case string = "s"
+        case date = "d"
+        case intArray = "a:n"
+        case floatArray = "a:f"
+        case stringArray = "a:s"
+    }
+    
+    public struct PropertyName {
+        
+        public struct App {
+            public static let Crash = "app_crash"
+            public static let CrashClass = "app_crash_class"
+            public static let CrashScreen = "app_crash_screen"
+            public static let DaysSinceFirstSession = "app_dsfs"
+            public static let DaysSinceLastSession = "app_dsls"
+            public static let DaysSinceUpdate = "app_dsu"
+            public static let Id = "app_id"
+            public static let FirstSession = "app_fs"
+            public static let FirstSessionAfterUpdate = "app_fsau"
+            public static let FirstSessionDate = "app_fsd"
+            public static let FirstSessionDateAfterUpdate = "app_fsdau"
+            public static let SessionCount = "app_sc"
+            public static let SessionCountSinceUpdate = "app_scsu"
+            public static let SessionId = "app_sessionid"
+            public static let Version = "app_version"
+        }
+        
+        public struct Browser {
+            public static let Browser = "browser"
+            public static let Language = "browser_language"
+            public static let LanguageLocal = "browser_language_local"
+            public static let CookieAcceptance = "browser_cookie_acceptance"
+            public static let Group = "browser_group"
+            public static let Version = "browser_version"
+        }
+        
+        public struct Click {
+            public static let Click = "click"
+            public static let Chapter1 = "click_chapter1"
+            public static let Chapter2 = "click_chapter2"
+            public static let Chapter3 = "click_chapter3"
+            public static let FullName = "click_full_name"
+        }
+        
+        public struct Connection {
+            public static let Monitor = "connection_monitor"
+            public static let Organisation = "connection_organisation"
+            public static let ConnectionType = "connection_type"
+        }
+    }
 
     public struct Privacy {
 
@@ -207,7 +295,7 @@ public struct PA {
                     "*": [
                         "visitor_privacy_consent",
                         "visitor_privacy_mode",
-                        "connection_type",
+                        PA.PropertyName.Connection.ConnectionType,
                         "device_timestamp_utc",
                     ]
                 ]
@@ -222,7 +310,7 @@ public struct PA {
                     "*": [
                         "visitor_privacy_consent",
                         "visitor_privacy_mode",
-                        "connection_type",
+                        PA.PropertyName.Connection.ConnectionType,
                         "device_timestamp_utc",
                     ]
                 ]
@@ -240,29 +328,29 @@ public struct PA {
             struct Exempt {
                 static let Name = "exempt"
                 static let AllowedEvents: Set<String> = [
-                    "click.exit",
-                    "click.navigation",
-                    "click.download",
-                    "click.action",
-                    "page.display"
+                    EventName.Click.Exit,
+                    EventName.Click.Navigation,
+                    EventName.Click.Download,
+                    EventName.Click.Action,
+                    EventName.Page.Display
                 ]
                 static let ForbiddenEvents: Set<String> = []
                 static let AllowedProperties: [String: Set<String>] = [PA.Privacy.Wildcard: [
-                    "app_crash",
-                    "app_crash_class",
-                    "app_crash_screen",
-                    "app_version",
-                    "browser",
-                    "browser_cookie_acceptance",
-                    "browser_group",
-                    "browser_version",
-                    "click",
-                    "click_chapter1",
-                    "click_chapter2",
-                    "click_chapter3",
-                    "click_full_name",
-                    "connection_monitor",
-                    "connection_organisation",
+                    PropertyName.App.Crash,
+                    PropertyName.App.CrashClass,
+                    PropertyName.App.CrashScreen,
+                    PropertyName.App.Version,
+                    PropertyName.Browser.Browser,
+                    PropertyName.Browser.CookieAcceptance,
+                    PropertyName.Browser.Group,
+                    PropertyName.Browser.Version,
+                    PropertyName.Click.Click,
+                    PropertyName.Click.Chapter1,
+                    PropertyName.Click.Chapter2,
+                    PropertyName.Click.Chapter3,
+                    PropertyName.Click.FullName,
+                    PropertyName.Connection.ConnectionType,
+                    PropertyName.Connection.Organisation,
                     "date",
                     "date_day",
                     "date_daynumber",

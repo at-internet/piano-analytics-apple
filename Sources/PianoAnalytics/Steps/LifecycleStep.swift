@@ -115,7 +115,7 @@ final class LifecycleStep: Step {
 
     private final func `init`() {
         let ud = UserDefaults.standard
-        if !ud.bool(forKey: LifeCycleKeys.FirstSession.rawValue) || ud.bool(forKey: LifeCycleKeys.FirstInitLifecycleDone.rawValue) {
+        if !ud.bool(forKey: LifeCycleKeys.FirstSession.rawValue) && ud.bool(forKey: LifeCycleKeys.FirstInitLifecycleDone.rawValue) {
             self.newSessionInit()
         } else {
             self.firstSessionInit()
@@ -145,6 +145,12 @@ final class LifecycleStep: Step {
         }
 
         let now = Date()
+        
+        if ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date == nil {
+            self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
+                                        (LifeCycleKeys.FirstSessionDate.rawValue, ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date ?? now))
+        }
+        
         self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
                                         (LifeCycleKeys.FirstSession.rawValue, false),
                                         (LifeCycleKeys.FirstSessionAfterUpdate.rawValue, false),
@@ -189,22 +195,22 @@ final class LifecycleStep: Step {
         }
 
         var m = [
-            "app_fs": ContextProperty(value: ud.bool(forKey: LifeCycleKeys.FirstSession.rawValue)),
-            "app_fsau": ContextProperty(value: ud.bool(forKey: LifeCycleKeys.FirstSessionAfterUpdate.rawValue)),
-            "app_sc": ContextProperty(value: ud.integer(forKey: LifeCycleKeys.SessionCount.rawValue)),
-            "app_dsls": ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceLastSession.rawValue)),
-            "app_dsfs": ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceFirstSession.rawValue)),
-            "app_sessionid": ContextProperty(value: self.sessionId ?? "")
+            PA.PropertyName.App.FirstSession: ContextProperty(value: ud.bool(forKey: LifeCycleKeys.FirstSession.rawValue)),
+            PA.PropertyName.App.FirstSessionAfterUpdate: ContextProperty(value: ud.bool(forKey: LifeCycleKeys.FirstSessionAfterUpdate.rawValue)),
+            PA.PropertyName.App.SessionCount: ContextProperty(value: ud.integer(forKey: LifeCycleKeys.SessionCount.rawValue)),
+            PA.PropertyName.App.DaysSinceLastSession: ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceLastSession.rawValue)),
+            PA.PropertyName.App.DaysSinceFirstSession: ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceFirstSession.rawValue)),
+            PA.PropertyName.App.SessionId: ContextProperty(value: self.sessionId ?? "")
         ] as [String: ContextProperty]
 
         if let fsd = ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date {
-            m["app_fsd"] = ContextProperty(value: self.lifecycleDateFormatter.string(from: fsd))
+            m[PA.PropertyName.App.FirstSessionDate] = ContextProperty(value: self.lifecycleDateFormatter.string(from: fsd))
         }
 
         if let fsdau = ud.object(forKey: LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue) as? Date {
-            m["app_fsdau"] = ContextProperty(value: self.lifecycleDateFormatter.string(from: fsdau))
-            m["app_scsu"] = ContextProperty(value: ud.integer(forKey: LifeCycleKeys.SessionCountSinceUpdate.rawValue))
-            m["app_dsu"] = ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceUpdate.rawValue))
+            m[PA.PropertyName.App.FirstSessionDateAfterUpdate] = ContextProperty(value: self.lifecycleDateFormatter.string(from: fsdau))
+            m[PA.PropertyName.App.SessionCountSinceUpdate] = ContextProperty(value: ud.integer(forKey: LifeCycleKeys.SessionCountSinceUpdate.rawValue))
+            m[PA.PropertyName.App.DaysSinceUpdate] = ContextProperty(value: ud.integer(forKey: LifeCycleKeys.DaysSinceUpdate.rawValue))
         }
 
         return m

@@ -64,6 +64,19 @@ final class PrivacyStep: Step {
                 }
             }
         }
+        
+        if let mode = UserDefaults.standard.string(forKey: PrivacyKeys.PrivacyMode.rawValue) {
+            switch mode {
+            case "optIn":
+                UserDefaults.standard.set(PA.Privacy.Mode.OptIn.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "optOut":
+                UserDefaults.standard.set(PA.Privacy.Mode.OptOut.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "noConsent":
+                UserDefaults.standard.set(PA.Privacy.Mode.NoConsent.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            default:
+                break
+            }
+        }
 
         self.configurationStep = cs
     }
