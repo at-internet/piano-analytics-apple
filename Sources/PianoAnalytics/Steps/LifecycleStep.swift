@@ -148,7 +148,7 @@ final class LifecycleStep: Step {
         
         if ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date == nil {
             self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
-                                        (LifeCycleKeys.FirstSessionDate.rawValue, ud.object(forKey: LifeCycleKeys.FirstSessionDate.rawValue) as? Date ?? now))
+                                        (LifeCycleKeys.FirstSessionDate.rawValue, ud.object(forKey: LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue) as? Date ?? now))
         }
         
         self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
