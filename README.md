@@ -119,6 +119,14 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
         "page_chapter3": "chapter 3"
     ]))
     ```
+    or
+    ```swift
+    pa.sendEvent(Event(PA.EventName.Page.Display, properties: Set([
+        try! Property("page", "name"),
+        try! Property("enabled", true),
+        try! Property("count", "1", forceType: .int)
+    ])))
+    ```
 
 _For more examples, please refer to the [Documentation](https://developers.atinternet-solutions.com/piano-analytics/)_
 
