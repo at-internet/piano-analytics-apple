@@ -115,7 +115,7 @@ final class LifecycleStep: Step {
 
     private final func `init`() {
         let ud = UserDefaults.standard
-        if !ud.bool(forKey: LifeCycleKeys.FirstSession.rawValue) && ud.bool(forKey: LifeCycleKeys.FirstInitLifecycleDone.rawValue) {
+        if ud.bool(forKey: LifeCycleKeys.FirstInitLifecycleDone.rawValue) {
             self.newSessionInit()
         } else {
             self.firstSessionInit()
