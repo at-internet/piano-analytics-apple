@@ -345,7 +345,7 @@ class PropertiesTests: XCTestCase {
 
         self.pa.setProperty(key: "event_collection_platform", value: "1")
         self.pa.setProperty(key: "event_collection_version", value: "2")
-        self.pa.setProperty(key: "device_timestamp_utc", value: "3")
+        self.pa.setProperty(key: PA.PropertyName.Device.TimestampUTC, value: "3")
         self.pa.sendEvent(Event("toto", data: [:]), config: nil, p: TestProtocol { built, _ in
             localBuilt1 = built
             expectation.fulfill()
@@ -358,8 +358,8 @@ class PropertiesTests: XCTestCase {
         XCTAssertNotEqual(events1.first?.data["event_collection_platform"] as? String, nil)
         XCTAssertNotEqual(events1.first?.data["event_collection_version"] as? String, "2")
         XCTAssertNotEqual(events1.first?.data["event_collection_version"] as? String, nil)
-        XCTAssertNotEqual(events1.first?.data["device_timestamp_utc"] as? String, "3")
-        XCTAssertNotEqual(events1.first?.data["device_timestamp_utc"] as? TimeInterval, nil)
+        XCTAssertNotEqual(events1.first?.data[PA.PropertyName.Device.TimestampUTC] as? String, "3")
+        XCTAssertNotEqual(events1.first?.data[PA.PropertyName.Device.TimestampUTC] as? TimeInterval, nil)
     }
 
     // MARK: - SET PROPERTIES
@@ -632,7 +632,7 @@ class PropertiesTests: XCTestCase {
         let expectation = self.expectation(description: "Before send")
         var localBuilt1: BuiltModel?
 
-        self.pa.setProperties(["event_collection_platform": "1", "event_collection_version": "2", "device_timestamp_utc": "3"])
+        self.pa.setProperties(["event_collection_platform": "1", "event_collection_version": "2", PA.PropertyName.Device.TimestampUTC: "3"])
         self.pa.sendEvent(Event("toto", data: [:]), config: nil, p: TestProtocol { built, _ in
             localBuilt1 = built
             expectation.fulfill()
@@ -645,8 +645,8 @@ class PropertiesTests: XCTestCase {
         XCTAssertNotEqual(events1.first?.data["event_collection_platform"] as? String, nil)
         XCTAssertNotEqual(events1.first?.data["event_collection_version"] as? String, "2")
         XCTAssertNotEqual(events1.first?.data["event_collection_version"] as? String, nil)
-        XCTAssertNotEqual(events1.first?.data["device_timestamp_utc"] as? String, "3")
-        XCTAssertNotEqual(events1.first?.data["device_timestamp_utc"] as? TimeInterval, nil)
+        XCTAssertNotEqual(events1.first?.data[PA.PropertyName.Device.TimestampUTC] as? String, "3")
+        XCTAssertNotEqual(events1.first?.data[PA.PropertyName.Device.TimestampUTC] as? TimeInterval, nil)
     }
 
     // MARK: - DELETE PROPERTY

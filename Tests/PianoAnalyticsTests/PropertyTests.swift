@@ -90,14 +90,3 @@ class PropertyTests: XCTestCase {
         XCTAssertEqual(set.first?.value as? Int, 1)
     }
 }
-
-func nnn() {
-    
-pa.sendEvent(
-    Event(PA.EventName.Page.Display, properties: Set([
-        try! Property("page", "name"),
-        try! Property("enabled", true),
-        try! Property("count", "1", forceType: .int)
-    ]))
-)
-}

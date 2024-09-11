@@ -60,35 +60,35 @@ public final class Property {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: Int, forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: Int, forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: Int64, forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: Int64, forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: Double, forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: Double, forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: String, forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: String, forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: Date) throws {
+    public convenience init(_ name: String, _ value: Date) throws {
         try self.init(name: name, value: Int64(value.timeIntervalSince1970), forceType: .date)
     }
     
-    convenience init(_ name: String, _ value: [Int], forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: [Int], forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: [Double], forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: [Double], forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
     
-    convenience init(_ name: String, _ value: [String], forceType: PA.PropertyType? = nil) throws {
+    public convenience init(_ name: String, _ value: [String], forceType: PA.PropertyType? = nil) throws {
         try self.init(name: name, value: value, forceType: forceType)
     }
 }

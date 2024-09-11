@@ -83,8 +83,8 @@ final class PrivacyStep: Step {
 
     // MARK: Constants
 
-    private static let VisitorPrivacyConsentProperty = "visitor_privacy_consent"
-    private static let VisitorPrivacyModeProperty = "visitor_privacy_mode"
+    private static let VisitorPrivacyConsentProperty = PA.PropertyName.Visitor.PrivacyConsent
+    private static let VisitorPrivacyModeProperty = PA.PropertyName.Visitor.PrivacyMode
     private static let PagePropertiesFormat = "page_%@"
 
     // MARK: Package methods

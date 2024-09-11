@@ -72,7 +72,7 @@ class SendTests: XCTestCase {
         self.pa.getModel { m in
             model = m
         }
-        self.pa.sendEvent(Event("page.display"), config: nil, p: PianoAnalyticsCallbacks { _, _ in
+        self.pa.sendEvent(Event(PA.EventName.Page.Display), config: nil, p: PianoAnalyticsCallbacks { _, _ in
             expectation.fulfill()
         })
         waitForExpectations(timeout: 5, handler: nil)

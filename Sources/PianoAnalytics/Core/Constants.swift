@@ -109,6 +109,9 @@ public struct PA {
     
     public struct PropertyName {
         
+        public static let HitTimeUTC = "hit_time_utc"
+        public static let PrivacyStatus = "privacy_status"
+        
         public struct App {
             public static let Crash = "app_crash"
             public static let CrashClass = "app_crash_class"
@@ -148,6 +151,134 @@ public struct PA {
             public static let Monitor = "connection_monitor"
             public static let Organisation = "connection_organisation"
             public static let ConnectionType = "connection_type"
+        }
+        
+        public struct Date {
+            public static let Date = "date"
+            public static let Day = "date_day"
+            public static let DayNumber = "date_daynumber"
+            public static let Month = "date_month"
+            public static let MonthNumber = "date_monthnumber"
+            public static let Week = "date_week"
+            public static let Year = "date_year"
+            public static let YearOfWeek = "date_yearofweek"
+        }
+        
+        public struct Device {
+            public static let Brand = "device_brand"
+            public static let Manufacturer = "device_manufacturer"
+            public static let Model = "device_model"
+            public static let DisplayHeight = "device_display_height"
+            public static let DisplayWidth = "device_display_width"
+            public static let Name = "device_name"
+            public static let NameTech = "device_name_tech"
+            public static let ScreenDiagonal = "device_screen_diagonal"
+            public static let ScreenHeight = "device_screen_height"
+            public static let ScreenWidth = "device_screen_width"
+            public static let TimestampUTC = "device_timestamp_utc"
+            public static let DeviceType = "device_type"
+        }
+        
+        public struct Event {
+            public static let CollectionPlatform = "event_collection_platform"
+            public static let CollectionVersion = "event_collection_version"
+            public static let Hour = "event_hour"
+            public static let Id = "event_id"
+            public static let Minute = "event_minute"
+            public static let Name = "event_name"
+            public static let Position = "event_position"
+            public static let Second = "event_second"
+            public static let Time = "event_time"
+            public static let TimeUTC = "event_time_utc"
+            public static let Url = "event_url"
+            public static let UrlDomain = "event_url_domain"
+            public static let UrlFull = "event_url_full"
+        }
+        
+        public struct Exclusion {
+            public static let Cause = "exclusion_cause"
+            public static let ExclusionType = "exclusion_type"
+        }
+        
+        public struct Geo {
+            public static let City = "geo_city"
+            public static let Continent = "geo_continent"
+            public static let Country = "geo_country"
+            public static let Metro = "geo_metro"
+            public static let Region = "geo_region"
+        }
+        
+        public struct OS {
+            public static let OS = "os"
+            public static let Group = "os_group"
+            public static let Version = "os_version"
+            public static let VersionName = "os_version_name"
+        }
+        
+        public struct Page {
+            public static let Page = "page"
+            public static let Chapter1 = "page_chapter1"
+            public static let Chapter2 = "page_chapter2"
+            public static let Chapter3 = "page_chapter3"
+            public static let Duration = "page_duration"
+            public static let FullName = "page_full_name"
+            public static let Position = "page_position"
+        }
+        
+        public struct Site {
+            public static let Site = "site"
+            public static let Env = "site_env"
+            public static let Id = "site_id"
+            public static let Platform = "site_platform"
+        }
+        
+        public struct Src {
+            public static let Src = "src"
+            public static let Detail = "src_detail"
+            public static let DirectAccess = "src_direct_access"
+            public static let Organic = "src_organic"
+            public static let OrganicDetail = "src_organic_detail"
+            public static let PortalDomain = "src_portal_domain"
+            public static let PortalSite = "src_portal_site"
+            public static let PortalSiteId = "src_portal_site_id"
+            public static let PortalUrl = "src_portal_url"
+            public static let ReferrerSiteDomain = "src_referrer_site_domain"
+            public static let ReferrerSiteUrl = "src_referrer_site_url"
+            public static let ReferrerUrl = "src_referrer_url"
+            public static let SE = "src_se"
+            public static let SECategory = "src_se_category"
+            public static let SECountry = "src_se_country"
+            public static let SrcType = "src_type"
+            public static let Url = "src_url"
+            public static let UrlDomain = "src_url_domain"
+            public static let Webmail = "src_webmail"
+        }
+        
+        public struct Visit {
+            public static let Bounce = "visit_bounce"
+            public static let Duration = "visit_duration"
+            public static let EntryPage = "visit_entrypage"
+            public static let EntryPageChapter1 = "visit_entrypage_chapter1"
+            public static let EntryPageChapter2 = "visit_entrypage_chapter2"
+            public static let EntryPageChapter3 = "visit_entrypage_chapter3"
+            public static let EntryPageFullName = "visit_entrypage_full_name"
+            public static let ExitPage = "visit_exitpage"
+            public static let ExitPageChapter1 = "visit_exitpage_chapter1"
+            public static let ExitPageChapter2 = "visit_exitpage_chapter2"
+            public static let ExitPageChapter3 = "visit_exitpage_chapter3"
+            public static let ExitPageFullName = "visit_exitpage_full_name"
+            public static let Hour = "visit_hour"
+            public static let Id = "visit_id"
+            public static let Minute = "visit_minute"
+            public static let PageViews = "visit_page_views"
+            public static let Second = "visit_second"
+            public static let Time = "visit_time"
+        }
+        
+        public struct Visitor {
+            public static let PrivacyConsent = "visitor_privacy_consent"
+            public static let PrivacyMode = "visitor_privacy_mode"
+            public static let IdType = "visitor_id_type"
         }
     }
 
@@ -293,10 +424,10 @@ public struct PA {
                 static let ForbiddenEvents: Set<String> = []
                 static let AllowedProperties: [String: Set<String>] = [
                     "*": [
-                        "visitor_privacy_consent",
-                        "visitor_privacy_mode",
-                        PA.PropertyName.Connection.ConnectionType,
-                        "device_timestamp_utc",
+                        PropertyName.Visitor.PrivacyConsent,
+                        PropertyName.Visitor.PrivacyMode,
+                        PropertyName.Connection.ConnectionType,
+                        PropertyName.Device.TimestampUTC,
                     ]
                 ]
                 static let ForbiddenProperties: [String: Set<String>] = [:]
@@ -308,10 +439,10 @@ public struct PA {
                 static let ForbiddenEvents: Set<String> = []
                 static let AllowedProperties: [String: Set<String>] = [
                     "*": [
-                        "visitor_privacy_consent",
-                        "visitor_privacy_mode",
-                        PA.PropertyName.Connection.ConnectionType,
-                        "device_timestamp_utc",
+                        PropertyName.Visitor.PrivacyConsent,
+                        PropertyName.Visitor.PrivacyMode,
+                        PropertyName.Connection.ConnectionType,
+                        PropertyName.Device.TimestampUTC,
                     ]
                 ]
                 static let ForbiddenProperties: [String: Set<String>] = [:]
@@ -351,103 +482,102 @@ public struct PA {
                     PropertyName.Click.FullName,
                     PropertyName.Connection.ConnectionType,
                     PropertyName.Connection.Organisation,
-                    "date",
-                    "date_day",
-                    "date_daynumber",
-                    "date_month",
-                    "date_monthnumber",
-                    "date_week",
-                    "date_year",
-                    "date_yearofweek",
-                    "device_brand",
-                    "device_display_height",
-                    "device_display_width",
-                    "device_manufacturer",
-                    "device_model",
-                    "device_name",
-                    "device_name_tech",
-                    "device_screen_diagonal",
-                    "device_screen_height",
-                    "device_screen_width",
-                    "device_type",
-                    "event_collection_platform",
-                    "event_collection_version",
-                    "event_hour",
-                    "event_id",
-                    "event_minute",
-                    "event_name",
-                    "event_position",
-                    "event_second",
-                    "event_time",
-                    "event_time_utc",
-                    "event_url",
-                    "event_url_domain",
-                    "event_url_full",
-                    "exclusion_cause",
-                    "exclusion_type",
-                    "geo_city",
-                    "geo_continent",
-                    "geo_country",
-                    "geo_metro",
-                    "geo_region",
-                    "hit_time_utc",
-                    "os",
-                    "os_group",
-                    "os_version",
-                    "os_version_name",
-                    "page",
-                    "page_chapter1",
-                    "page_chapter2",
-                    "page_chapter3",
-                    "page_duration",
-                    "page_full_name",
-                    "page_position",
-                    "privacy_status",
-                    "site",
-                    "site_env",
-                    "site_id",
-                    "site_platform",
-                    "src",
-                    "src_detail",
-                    "src_direct_access",
-                    "src_organic",
-                    "src_organic_detail",
-                    "src_portal_domain",
-                    "src_portal_site",
-                    "src_portal_site_id",
-                    "src_portal_url",
-                    "src_referrer_site_domain",
-                    "src_referrer_site_url",
-                    "src_referrer_url",
-                    "src_se",
-                    "src_se_category",
-                    "src_se_country",
-                    "src_type",
-                    "src_url",
-                    "src_url_domain",
-                    "src_webmail",
-                    "visit_bounce",
-                    "visit_duration",
-                    "visit_entrypage",
-                    "visit_entrypage_chapter1",
-                    "visit_entrypage_chapter2",
-                    "visit_entrypage_chapter3",
-                    "visit_entrypage_full_name",
-                    "visit_exitpage",
-                    "visit_exitpage_chapter1",
-                    "visit_exitpage_chapter2",
-                    "visit_exitpage_chapter3",
-                    "visit_exitpage_full_name",
-                    "visit_hour",
-                    "visit_id",
-                    "visit_minute",
-                    "visit_page_views",
-                    "visit_second",
-                    "visit_time",
-                    "visitor_privacy_consent",
-                    "visitor_privacy_mode",
-                    "connection_type",
-                    "device_timestamp_utc"
+                    PropertyName.Date.Date,
+                    PropertyName.Date.Day,
+                    PropertyName.Date.DayNumber,
+                    PropertyName.Date.Month,
+                    PropertyName.Date.MonthNumber,
+                    PropertyName.Date.Week,
+                    PropertyName.Date.Year,
+                    PropertyName.Date.YearOfWeek,
+                    PropertyName.Device.Brand,
+                    PropertyName.Device.DisplayHeight,
+                    PropertyName.Device.DisplayWidth,
+                    PropertyName.Device.Manufacturer,
+                    PropertyName.Device.Model,
+                    PropertyName.Device.Name,
+                    PropertyName.Device.NameTech,
+                    PropertyName.Device.ScreenDiagonal,
+                    PropertyName.Device.ScreenHeight,
+                    PropertyName.Device.ScreenWidth,
+                    PropertyName.Device.DeviceType,
+                    PropertyName.Device.TimestampUTC,
+                    PropertyName.Event.CollectionPlatform,
+                    PropertyName.Event.CollectionVersion,
+                    PropertyName.Event.Hour,
+                    PropertyName.Event.Id,
+                    PropertyName.Event.Minute,
+                    PropertyName.Event.Name,
+                    PropertyName.Event.Position,
+                    PropertyName.Event.Second,
+                    PropertyName.Event.Time,
+                    PropertyName.Event.TimeUTC,
+                    PropertyName.Event.Url,
+                    PropertyName.Event.UrlDomain,
+                    PropertyName.Event.UrlFull,
+                    PropertyName.Exclusion.Cause,
+                    PropertyName.Exclusion.ExclusionType,
+                    PropertyName.Geo.City,
+                    PropertyName.Geo.Continent,
+                    PropertyName.Geo.Country,
+                    PropertyName.Geo.Metro,
+                    PropertyName.Geo.Region,
+                    PropertyName.HitTimeUTC,
+                    PropertyName.OS.OS,
+                    PropertyName.OS.Group,
+                    PropertyName.OS.Version,
+                    PropertyName.OS.VersionName,
+                    PropertyName.Page.Page,
+                    PropertyName.Page.Chapter1,
+                    PropertyName.Page.Chapter2,
+                    PropertyName.Page.Chapter3,
+                    PropertyName.Page.Duration,
+                    PropertyName.Page.FullName,
+                    PropertyName.Page.Position,
+                    PropertyName.PrivacyStatus,
+                    PropertyName.Site.Site,
+                    PropertyName.Site.Env,
+                    PropertyName.Site.Id,
+                    PropertyName.Site.Platform,
+                    PropertyName.Src.Src,
+                    PropertyName.Src.Detail,
+                    PropertyName.Src.DirectAccess,
+                    PropertyName.Src.Organic,
+                    PropertyName.Src.OrganicDetail,
+                    PropertyName.Src.PortalDomain,
+                    PropertyName.Src.PortalSite,
+                    PropertyName.Src.PortalSiteId,
+                    PropertyName.Src.PortalUrl,
+                    PropertyName.Src.ReferrerSiteDomain,
+                    PropertyName.Src.ReferrerSiteUrl,
+                    PropertyName.Src.ReferrerUrl,
+                    PropertyName.Src.SE,
+                    PropertyName.Src.SECategory,
+                    PropertyName.Src.SECountry,
+                    PropertyName.Src.SrcType,
+                    PropertyName.Src.Url,
+                    PropertyName.Src.UrlDomain,
+                    PropertyName.Src.Webmail,
+                    PropertyName.Visit.Bounce,
+                    PropertyName.Visit.Duration,
+                    PropertyName.Visit.EntryPage,
+                    PropertyName.Visit.EntryPageChapter1,
+                    PropertyName.Visit.EntryPageChapter2,
+                    PropertyName.Visit.EntryPageChapter3,
+                    PropertyName.Visit.EntryPageFullName,
+                    PropertyName.Visit.ExitPage,
+                    PropertyName.Visit.ExitPageChapter1,
+                    PropertyName.Visit.ExitPageChapter2,
+                    PropertyName.Visit.ExitPageChapter3,
+                    PropertyName.Visit.ExitPageFullName,
+                    PropertyName.Visit.Hour,
+                    PropertyName.Visit.Id,
+                    PropertyName.Visit.Minute,
+                    PropertyName.Visit.PageViews,
+                    PropertyName.Visit.Second,
+                    PropertyName.Visit.Time,
+                    PropertyName.Visitor.PrivacyConsent,
+                    PropertyName.Visitor.PrivacyMode
                 ]]
                 static let ForbiddenProperties: [String: Set<String>] = [:]
                 static let AllowedStorage: Set<String> = [PA.Privacy.Storage.Crash, PA.Privacy.Storage.Privacy, PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]

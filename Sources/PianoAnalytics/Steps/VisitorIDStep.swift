@@ -140,7 +140,7 @@ final class VisitorIDStep: Step {
     // MARK: Constants
 
     private static let OptOut: String = "opt-out"
-    private static let VisitorIdTypeProperty: String = "visitor_id_type"
+    private static let VisitorIdTypeProperty: String = PA.PropertyName.Visitor.IdType
 
     // MARK: Private methods
 

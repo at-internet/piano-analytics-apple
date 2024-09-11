@@ -122,9 +122,9 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
     or
     ```swift
     pa.sendEvent(Event(PA.EventName.Page.Display, properties: Set([
-        try! Property("page", "name"),
-        try! Property("enabled", true),
-        try! Property("count", "1", forceType: .int)
+        try! Property(PA.PropertyName.Page.Page, "name"),
+        try! Property(PA.PropertyName.Page.Duration, true),
+        try! Property(PA.PropertyName.Page.Position, "1", forceType: .int)
     ])))
     ```
 
