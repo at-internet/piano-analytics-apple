@@ -42,19 +42,19 @@ public protocol PianoAnalyticsWorkProtocol {
     func onBeforeSend(built: BuiltModel?, stored: [String: BuiltModel]?) -> Bool
 }
 
-public final class PianoAnalytics {
+@objc public class PianoAnalytics: NSObject {
 
     // MARK: PUBLIC SECTION
     
     /// SDK version
-    public static let sdkVersion = "3.1.7"
+    @objc public static let sdkVersion = "3.1.7"
 
     /// Send event
     ///
     /// - Parameter event: a custom event
     /// - Parameter config: custom config used only for this action
     /// - Parameter p: protocol to leave customer handling
-    public final func sendEvent(_ event: Event, config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
+    @objc public func sendEvent(_ event: Event, config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
         sendEvents([event], config: config, p: p)
     }
 
@@ -63,7 +63,7 @@ public final class PianoAnalytics {
     /// - Parameter events: a custom event list
     /// - Parameter config: custom config used only for this action
     /// - Parameter p: protocol to leave customer handling
-    public final func sendEvents(_ events: [Event], config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
+    @objc public func sendEvents(_ events: [Event], config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
         let m = Model()
         m.events = events
 
@@ -80,7 +80,7 @@ public final class PianoAnalytics {
     /// Get configuration
     ///
     /// - Parameter key: configuration key to get
-    public final func getConfiguration(_ key: ConfigurationKey, completionHandler: ((_ configuration: String) -> Void)?) {
+   @objc func getConfiguration(_ key: ConfigurationKey, completionHandler: ((_ configuration: String) -> Void)?) {
         guard let completionHandler = completionHandler else {
             return
         }
@@ -100,7 +100,7 @@ public final class PianoAnalytics {
     /// ```
     ///
     /// - Parameter config: configuration object
-    public final func setConfiguration(_ config: Configuration) {
+   @objc func setConfiguration(_ config: Configuration) {
         let m = Model()
         m.configuration = config
         queue.push(ProcessingType.SetConfig, m: m, p: nil)
@@ -112,7 +112,7 @@ public final class PianoAnalytics {
     /// - Parameter value: property value
     /// - Parameter persistent: whether the property will be persistent or not
     /// - Parameter events: will send the property only those specific events
-    public final func setProperty(key: String, value: Any, persistent: Bool = false, events: [String]? = nil) {
+   @objc func setProperty(key: String, value: Any, persistent: Bool = false, events: [String]? = nil) {
         setProperties([key: value], persistent: persistent, events: events)
     }
 
@@ -121,7 +121,7 @@ public final class PianoAnalytics {
     /// - Parameter data: dictionary of properties to set
     /// - Parameter persistent: whether the properties will be persistent or not
     /// - Parameter events: will send the properties only those specific events
-    public final func setProperties(_ data: [String: Any], persistent: Bool = false, events: [String]? = nil) {
+   @objc func setProperties(_ data: [String: Any], persistent: Bool = false, events: [String]? = nil) {
         let model = Model()
         model.customerContextModel = CustomerContextModel(updateType: .Add, properties: PianoAnalyticsUtils.toFlatten(src: data), options: ContextPropertyOptions(persistent: persistent, events: events))
         queue.push(ProcessingType.UpdateContext, m: model, p: nil)
@@ -130,14 +130,14 @@ public final class PianoAnalytics {
     /// Delete property
     ///
     /// - Parameter key: property key
-    public final func deleteProperty(key: String) {
+   @objc func deleteProperty(key: String) {
         let model = Model()
         model.customerContextModel = CustomerContextModel(updateType: .Delete, properties: [key: true])
         queue.push(ProcessingType.UpdateContext, m: model, p: nil)
     }
 
     /// Get user
-    public final func getUser(completionHandler: ((_ user: User?) -> Void)?) {
+   @objc func getUser(completionHandler: ((_ user: User?) -> Void)?) {
         guard let completionHandler = completionHandler else {
             return
         }
@@ -151,7 +151,7 @@ public final class PianoAnalytics {
     /// - Parameter id: new user id
     /// - Parameter category: new user category
     /// - Parameter enableStorage: to store user in user defaults
-    public final func setUser(_ id: String, category: String? = nil, enableStorage: Bool = true) {
+   @objc func setUser(_ id: String, category: String? = nil, enableStorage: Bool = true) {
         let user = User(id, category: category)
 
         let model = Model()
@@ -160,7 +160,7 @@ public final class PianoAnalytics {
     }
 
     /// Delete current user
-    public final func deleteUser() {
+   @objc func deleteUser() {
         let model = Model()
         model.userModel = UserModel(updateType: UserModel.UpdateTypeKey.Delete)
         queue.push(ProcessingType.UpdateContext, m: model, p: nil)
@@ -171,7 +171,7 @@ public final class PianoAnalytics {
     /// Update privacy mode
     ///
     /// - Parameter mode: a privacy visitor mode
-    public final func privacySetMode(_ mode: String) {
+   @objc func privacySetMode(_ mode: String) {
         let privacyModel = PrivacyModel(
             visitorMode: mode,
             visitorConsent: PA.Privacy.Modes[mode]?.visitorConsent,
@@ -183,7 +183,7 @@ public final class PianoAnalytics {
     }
 
     /// Get current privacy mode
-    public final func privacyGetMode(completionHandler: ((_ privacyMode: String) -> Void)?) {
+   @objc func privacyGetMode(completionHandler: ((_ privacyMode: String) -> Void)?) {
         guard let completionHandler = completionHandler else {
             return
         }
@@ -197,7 +197,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter mode: name of the custom privacy visitor mode
     /// - Parameter visitorConsent: value of the visitor privacy consent property
-    public final func privacyCreateMode(_ mode: String, visitorConsent: Bool) {
+   @objc func privacyCreateMode(_ mode: String, visitorConsent: Bool) {
         let privacyModel = PrivacyModel(
             visitorMode: mode,
             visitorConsent: visitorConsent,
@@ -211,7 +211,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter eventName: string of an event name appended with what is currently set
     /// - Parameter privacyModes: a set of privacy visitor modes or by default applies to all modes
-    public final func privacyIncludeEvent(_ eventName: String, privacyModes: [String] = ["*"]) {
+   @objc func privacyIncludeEvent(_ eventName: String, privacyModes: [String] = ["*"]) {
         privacyIncludeEvents([eventName], privacyModes: privacyModes)
     }
 
@@ -219,7 +219,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter eventNames: string set of event names appended with what is currently set
     /// - Parameter privacyModes: a set of privacy visitor modes or by default applies to all modes
-    public final func privacyIncludeEvents(_ eventNames: [String], privacyModes: [String] = ["*"]) {
+   @objc func privacyIncludeEvents(_ eventNames: [String], privacyModes: [String] = ["*"]) {
         for privacyMode in privacyModes {
             let privacyModel = PrivacyModel(visitorMode: privacyMode, authorizedEventNames: Set(eventNames), updateData: PrivacyModel.UpdateDataKey.EventNames)
 
@@ -233,7 +233,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter eventName: string of an event name appended with what is currently set
     /// - Parameter privacyModes: a set of privacy visitor modes
-    public final func privacyExcludeEvent(_ eventName: String, privacyModes: [String] = ["*"]) {
+   @objc func privacyExcludeEvent(_ eventName: String, privacyModes: [String] = ["*"]) {
         privacyExcludeEvents([eventName], privacyModes: privacyModes)
     }
 
@@ -241,7 +241,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter eventNames: string set of event names appended with what is currently set
     /// - Parameter privacyModes: a set of privacy visitor modes
-    public final func privacyExcludeEvents(_ eventNames: [String], privacyModes: [String] = ["*"]) {
+   @objc func privacyExcludeEvents(_ eventNames: [String], privacyModes: [String] = ["*"]) {
         for privacyMode in privacyModes {
             let privacyModel = PrivacyModel(visitorMode: privacyMode, forbiddenEventNames: Set(eventNames), updateData: PrivacyModel.UpdateDataKey.EventNames)
 
@@ -256,7 +256,7 @@ public final class PianoAnalytics {
     /// - Parameter property: string property appended with what is currently set
     /// - Parameter privacyModes: array of privacy modes on which we will authorize the property, by default we authorize the property for all the privacy modes
     /// - Parameter eventNames: array of event names on which we will authorize the property, by default we authorize the property on all the events
-    public final func privacyIncludeProperty(_ property: String, privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
+   @objc func privacyIncludeProperty(_ property: String, privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
         privacyIncludeProperties([property], privacyModes: privacyModes, eventNames: eventNames)
     }
 
@@ -265,7 +265,7 @@ public final class PianoAnalytics {
     /// - Parameter properties: string set of properties appended with what is currently set
     /// - Parameter privacyModes: array of privacy modes on which we will authorize the properties, by default we authorize the properties for all the privacy modes
     /// - Parameter eventNames: array of event names on which we will authorize the properties, by default we authorize the properties on all the events
-    public final func privacyIncludeProperties(_ properties: [String], privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
+   @objc func privacyIncludeProperties(_ properties: [String], privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
         for privacyMode in privacyModes ?? ["*"] {
             var propertiesByEvents: [String: Set<String>] = [:]
             for eventName in eventNames ?? ["*"] {
@@ -284,7 +284,7 @@ public final class PianoAnalytics {
     /// - Parameter property: string property appended with what is currently set
     /// - Parameter privacyModes: array of privacy modes on which we will forbid the property, by default we forbid the property for all the privacy modes
     /// - Parameter eventNames: array of event names on which we will forbid the property, by default we forbid the property on all the events
-    public final func privacyExcludeProperty(_ property: String, privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
+   @objc func privacyExcludeProperty(_ property: String, privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
         privacyExcludeProperties([property], privacyModes: privacyModes, eventNames: eventNames)
     }
 
@@ -293,7 +293,7 @@ public final class PianoAnalytics {
     /// - Parameter properties: string set of properties appended with what is currently set
     /// - Parameter privacyModes: array of privacy modes on which we will forbid the properties, by default we forbid the properties for all the privacy modes
     /// - Parameter eventNames: array of event names on which we will forbid the properties, by default we forbid the properties on all the events
-    public final func privacyExcludeProperties(_ properties: [String], privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
+   @objc func privacyExcludeProperties(_ properties: [String], privacyModes: [String]? = ["*"], eventNames: [String]? = ["*"]) {
         for privacyMode in privacyModes ?? ["*"] {
             var propertiesByEvents: [String: Set<String>] = [:]
             for eventName in eventNames ?? ["*"] {
@@ -311,7 +311,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter storageKey: string of authorized key to store data into device
     /// - Parameter privacyModes: an array of privacy visitor modes on which to include this key
-    public final func privacyIncludeStorageKey(_ storageKey: String, privacyModes: [String]? = ["*"]) {
+   @objc func privacyIncludeStorageKey(_ storageKey: String, privacyModes: [String]? = ["*"]) {
         privacyIncludeStorageKeys([storageKey], privacyModes: privacyModes)
     }
 
@@ -319,7 +319,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter storageKeys: string set of authorized keys to store data into device
     /// - Parameter privacyModes: an array of privacy visitor modes on which to include these keys
-    public final func privacyIncludeStorageKeys(_ storageKeys: [String], privacyModes: [String]? = ["*"]) {
+   @objc func privacyIncludeStorageKeys(_ storageKeys: [String], privacyModes: [String]? = ["*"]) {
         for privacyMode in privacyModes ?? ["*"] {
             var tempStorageKeys = Set<String>()
             storageKeys.forEach { storageKey in
@@ -339,7 +339,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter storageKey: string of forbidden key to store data into device
     /// - Parameter privacyModes: an array of privacy visitor modes on which to exclude this key
-    public final func privacyExcludeStorageKey(_ storageKey: String, privacyModes: [String]? = ["*"]) {
+   @objc func privacyExcludeStorageKey(_ storageKey: String, privacyModes: [String]? = ["*"]) {
         privacyExcludeStorageKeys([storageKey], privacyModes: privacyModes)
     }
 
@@ -347,7 +347,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter storageKeys: string set of forbidden keys to store data into device
     /// - Parameter privacyModes: an array of privacy visitor modes on which to exclude these keys
-    public final func privacyExcludeStorageKeys(_ storageKeys: [String], privacyModes: [String]? = ["*"]) {
+   @objc func privacyExcludeStorageKeys(_ storageKeys: [String], privacyModes: [String]? = ["*"]) {
         for privacyMode in privacyModes ?? ["*"] {
             var tempStorageKeys = Set<String>()
             storageKeys.forEach { storageKey in
@@ -368,7 +368,7 @@ public final class PianoAnalytics {
     ///
     /// - Parameter config: custom config used only for this action
     /// - Parameter p: protocol to leave customer handling
-    public final func sendOfflineData(config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
+   @objc func sendOfflineData(config: Configuration? = nil, p: PianoAnalyticsWorkProtocol? = nil) {
         let m = Model()
         if let conf = config {
             if conf.containsKey(ConfigurationKey.VisitorId) {
@@ -383,14 +383,14 @@ public final class PianoAnalytics {
     /// Delete offline data stored on device and keep only remaining days
     ///
     /// - Parameter remaining: age of data which have to be kept (in days)
-    public final func deleteOfflineData(remaining: Int? = nil) {
+   @objc func deleteOfflineData(remaining: Int? = nil) {
         let m = Model()
         m.storageDaysRemaining = remaining
         queue.push(ProcessingType.DeleteOfflineData, m: m, p: nil)
     }
 
     /// Get current visitor id
-    public final func getVisitorId(completionHandler: ((_ visitorId: String) -> Void)?) {
+   @objc func getVisitorId(completionHandler: ((_ visitorId: String) -> Void)?) {
         guard let ch = completionHandler else {
             return
         }
@@ -402,7 +402,7 @@ public final class PianoAnalytics {
     /// Set current visitor id
     ///
     /// - Parameter visitorId: custom visitor id to force in upcoming events
-    public final func setVisitorId(_ visitorId: String) {
+   @objc func setVisitorId(_ visitorId: String) {
         setConfiguration(ConfigurationBuilder()
             .withVisitorIdType(VisitorIdType.Custom.rawValue)
             .withVisitorID(visitorId)
@@ -410,7 +410,7 @@ public final class PianoAnalytics {
     }
 
     /// Get all data in the model
-    public final func getModel(completionHandler: ((_ model: Model) -> Void)?) {
+   @objc func getModel(completionHandler: ((_ model: Model) -> Void)?) {
         guard let ch = completionHandler else {
             return
         }
@@ -426,7 +426,7 @@ public final class PianoAnalytics {
     private static var _instance: PianoAnalytics?
 
     /// Simple default init
-    public static let shared: PianoAnalytics = sharedWithConfigurationFilePath(ConfigFile)
+    @objc public static let shared: PianoAnalytics = sharedWithConfigurationFilePath(ConfigFile)
 
     /// Specific init with custom location configuration file
     ///
@@ -448,7 +448,7 @@ public final class PianoAnalytics {
         return _instance ?? PianoAnalytics(extendedConfiguration: extendedConfiguration)
     }
     
-    internal final let queue: WorkingQueue
+    internal let queue: WorkingQueue
 
     init(configFileLocation: String) {
         let extendedConfiguration = PA.ExtendedConfiguration(configFileLocation)
