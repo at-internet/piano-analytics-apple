@@ -204,6 +204,17 @@ final class VisitorIDStep: Step {
     }
 
     private final func getVisitorID(c: Configuration, visitorIdType: VisitorIdType) -> String {
+        switch privacyStep.processGetMode() {
+        case PA.Privacy.Mode.NoConsent.Name:
+            return "Consent-NO"
+        case PA.Privacy.Mode.NoStorage.Name:
+            return "no-storage"
+        case PA.Privacy.Mode.OptOut.Name:
+            return VisitorIDStep.OptOut
+        default:
+            break
+        }
+        
         var cl: visitorIDClosure
 
         switch visitorIdType {
