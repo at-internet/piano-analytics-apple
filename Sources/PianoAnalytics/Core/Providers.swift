@@ -1,5 +1,5 @@
 //
-//  ExtendedConfiguration.swift
+//  Providers.swift
 //
 //  This SDK is licensed under the MIT license (MIT)
 //  Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
@@ -23,31 +23,7 @@
 //  SOFTWARE.
 //
 
-import Foundation
-
-extension PA {
-    
-    /// Extended configuration parameters
-    public struct ExtendedConfiguration {
-        
-        /// Create custom URLSession
-        public var urlSession: (() -> URLSession)? = nil
-        
-        /// Configure URL session
-        public var configureURLSession: ((URLSessionConfiguration) -> Void)? = nil
-        
-        /// Configure HTTP provider
-        public var httpProvider: CustomHTTPProvider? = nil
-        
-        /// Configuration file location
-        internal let configFileLocation: String
-        
-        public init(_ configFileLocation: String) {
-            self.configFileLocation = configFileLocation
-        }
-        
-        public init() {
-            self.configFileLocation = Configuration.Location
-        }
-    }
+public protocol CustomHTTPProvider {
+    var headers: [String:String] { get }
+    var query: [String:String] { get }
 }

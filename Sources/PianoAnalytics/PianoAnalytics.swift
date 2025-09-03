@@ -76,7 +76,7 @@ public final class PianoAnalytics {
 
         queue.push(ProcessingType.SendEvents, m: m, p: p)
     }
-
+    
     /// Get configuration
     ///
     /// - Parameter key: configuration key to get

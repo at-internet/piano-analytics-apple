@@ -64,14 +64,27 @@ final class PrivacyStep: Step {
                 }
             }
         }
+        
+        if let mode = UserDefaults.standard.string(forKey: PrivacyKeys.PrivacyMode.rawValue) {
+            switch mode {
+            case "optIn":
+                UserDefaults.standard.set(PA.Privacy.Mode.OptIn.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "optOut":
+                UserDefaults.standard.set(PA.Privacy.Mode.OptOut.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "noConsent":
+                UserDefaults.standard.set(PA.Privacy.Mode.NoConsent.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            default:
+                break
+            }
+        }
 
         self.configurationStep = cs
     }
 
     // MARK: Constants
 
-    private static let VisitorPrivacyConsentProperty = "visitor_privacy_consent"
-    private static let VisitorPrivacyModeProperty = "visitor_privacy_mode"
+    private static let VisitorPrivacyConsentProperty = PA.PropertyName.Visitor.PrivacyConsent
+    private static let VisitorPrivacyModeProperty = PA.PropertyName.Visitor.PrivacyMode
     private static let PagePropertiesFormat = "page_%@"
 
     // MARK: Package methods

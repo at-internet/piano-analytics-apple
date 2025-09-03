@@ -1,5 +1,5 @@
 //
-//  ExtendedConfiguration.swift
+//  Error.swift
 //
 //  This SDK is licensed under the MIT license (MIT)
 //  Copyright (c) 2015- Applied Technologies Internet SAS (registration number B 403 261 258 - Trade and Companies Register of Bordeaux – France)
@@ -25,29 +25,18 @@
 
 import Foundation
 
-extension PA {
+public extension PA {
     
-    /// Extended configuration parameters
-    public struct ExtendedConfiguration {
+    final class Err: LocalizedError, CustomStringConvertible, CustomDebugStringConvertible {
         
-        /// Create custom URLSession
-        public var urlSession: (() -> URLSession)? = nil
+        public let message: String
         
-        /// Configure URL session
-        public var configureURLSession: ((URLSessionConfiguration) -> Void)? = nil
+        public var errorDescription: String? { message }
+        public var description: String { message }
+        public var debugDescription: String { message }
         
-        /// Configure HTTP provider
-        public var httpProvider: CustomHTTPProvider? = nil
-        
-        /// Configuration file location
-        internal let configFileLocation: String
-        
-        public init(_ configFileLocation: String) {
-            self.configFileLocation = configFileLocation
-        }
-        
-        public init() {
-            self.configFileLocation = Configuration.Location
+        init(message: String) {
+            self.message = message
         }
     }
 }

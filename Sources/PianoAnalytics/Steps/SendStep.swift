@@ -78,7 +78,15 @@ final class SendStep: Step {
     private final func send(_ builtModel: BuiltModel, userAgent: String) {
         guard let uri = builtModel.uri,
               let body = builtModel.body,
-              let url = URL(string: uri) else {
+              var urlComponents = URLComponents(string: uri) else {
+            return
+        }
+        
+        if let query = extendedConfiguration.httpProvider?.query {
+            urlComponents.queryItems = (urlComponents.queryItems ?? []) + query.map { URLQueryItem(name: $0, value: $1) }
+        }
+        
+        guard let url = urlComponents.url else {
             return
         }
 
@@ -93,6 +101,8 @@ final class SendStep: Step {
         }
         request.httpMethod = "POST"
         request.httpBody = Data(body.utf8)
+        
+        extendedConfiguration.httpProvider?.headers.forEach { request.setValue($1, forHTTPHeaderField: $0) }
 
         var success = false
         var count = 0

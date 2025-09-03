@@ -54,7 +54,7 @@ final class InternalContextPropertiesStep: Step {
     private final let applicationProperties : () -> [String: Any] = {
         var m = [String: Any]()
         if let appInfo = PianoAnalyticsUtils.applicationInfo {
-            m["app_id"] = appInfo.0
+            m[AppIdProperty] = appInfo.0
             m[AppVersionProperty] = appInfo.1
         }
         return m
@@ -111,14 +111,15 @@ final class InternalContextPropertiesStep: Step {
 
     // MARK: Constants
 
-    static let DeviceTimestampUtcProperty = "device_timestamp_utc"
-    static let ConnectionTypeProperty = "connection_type"
+    static let DeviceTimestampUtcProperty = PA.PropertyName.Device.TimestampUTC
+    static let ConnectionTypeProperty = PA.PropertyName.Connection.ConnectionType
     static let DeviceScreenPropertiesFormat = "device_screen%@"
     static let DeviceScreenDiagonalProperty = String(format: DeviceScreenPropertiesFormat, "_diagonal")
-    static let AppVersionProperty = "app_version"
-    static let ManufacturerProperty = "device_manufacturer"
-    static let ModelProperty = "device_model"
-    static let OsProperty = "os"
+    static let AppIdProperty = PA.PropertyName.App.Id
+    static let AppVersionProperty = PA.PropertyName.App.Version
+    static let ManufacturerProperty = PA.PropertyName.Device.Manufacturer
+    static let ModelProperty = PA.PropertyName.Device.Model
+    static let OsProperty = PA.PropertyName.OS.OS
     static let OsPropertiesFormat = "os_%@"
     static let EventCollectionPropertiesFormat = "event_collection_%@"
     static let BrowserLanguagePropertiesFormat = "browser_language%@"

@@ -30,9 +30,18 @@ public final class Event {
     public final let name: String
     public final let data: [String: Any]
 
-    public init(_ name: String, data: [String: Any] = [:]) {
+    public init(_ name: String, data: [String: Any]) {
         self.name = name
         self.data = PianoAnalyticsUtils.toFlatten(src: data)
+    }
+    
+    public init(_ name: String) {
+        self.name = name
+        self.data = [:]
+    }
+    
+    public convenience init(_ name: String, properties: Set<Property>) {
+        self.init(name, data: properties.toMap())
     }
 
     final func toMap(context: [String: ContextProperty] = [:]) -> [String: Any] {
