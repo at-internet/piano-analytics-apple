@@ -73,6 +73,8 @@ final class PrivacyStep: Step {
                 UserDefaults.standard.set(PA.Privacy.Mode.OptOut.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
             case "noConsent":
                 UserDefaults.standard.set(PA.Privacy.Mode.NoConsent.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "none":
+                UserDefaults.standard.set(cs.getConfigurationValue(key: .PrivacyDefaultMode), forKey: PrivacyKeys.PrivacyMode.rawValue)
             default:
                 break
             }
