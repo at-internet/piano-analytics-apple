@@ -220,10 +220,9 @@ final class PrivacyStep: Step {
             }
         }
         
-        if let privacyMode = userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue), privacyMode != "none" {
-            return privacyMode
-        }
-        return getConsentsMode() ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
+        return userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue)
+            ?? getConsentsMode()
+            ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
     }
     
     private final func getConsentsMode() -> String? {
