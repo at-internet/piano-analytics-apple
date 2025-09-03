@@ -73,6 +73,8 @@ final class PrivacyStep: Step {
                 UserDefaults.standard.set(PA.Privacy.Mode.OptOut.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
             case "noConsent":
                 UserDefaults.standard.set(PA.Privacy.Mode.NoConsent.Name, forKey: PrivacyKeys.PrivacyMode.rawValue)
+            case "none":
+                UserDefaults.standard.set(cs.getConfigurationValue(key: .PrivacyDefaultMode), forKey: PrivacyKeys.PrivacyMode.rawValue)
             default:
                 break
             }
@@ -207,7 +209,6 @@ final class PrivacyStep: Step {
 
         let userDefaults = UserDefaults.standard
         let storageLifetimePrivacy = configurationStep.getConfigurationValue(key: ConfigurationKey.StorageLifetimePrivacy).toInt()
-        let defaultMode = getConsentsMode() ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
 
         if let privacyModeExpirationTs = userDefaults.object(forKey: PrivacyKeys.PrivacyModeExpirationTimestamp.rawValue) as? Int64 {
             if Int64(Date().timeIntervalSince1970 * 1000) >= privacyModeExpirationTs {
@@ -218,7 +219,10 @@ final class PrivacyStep: Step {
                 userDefaults.synchronize()
             }
         }
-        return userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue) ?? defaultMode
+        
+        return getConsentsMode()
+            ?? userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue)
+            ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
     }
     
     private final func getConsentsMode() -> String? {
