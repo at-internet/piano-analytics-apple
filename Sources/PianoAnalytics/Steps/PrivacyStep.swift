@@ -220,8 +220,8 @@ final class PrivacyStep: Step {
             }
         }
         
-        return userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue)
-            ?? getConsentsMode()
+        return getConsentsMode()
+            ?? userDefaults.string(forKey: PrivacyKeys.PrivacyMode.rawValue)
             ?? configurationStep.getConfigurationValue(key: ConfigurationKey.PrivacyDefaultMode)
     }
     
