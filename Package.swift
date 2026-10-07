@@ -1,20 +1,20 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 
 import PackageDescription
 
 let package = Package(
     name: "PianoAnalytics",
     platforms: [
-        .iOS(.v10),
-        .tvOS(.v10),
-        .watchOS(.v3),
-        .macOS(.v10_12)
+        .iOS(.v15),
+        .tvOS(.v15),
+        .watchOS(.v9),
+        .macOS(.v13)
     ],
     products: [
         .library(name: "PianoAnalytics", targets: ["PianoAnalytics"])
     ],
     dependencies: [
-        .package(url: "https://gitlab.com/piano-public/sdk/ios/packages/consents", .upToNextMinor(from: "1.0.9")),
+        .package(url: "https://gitlab.com/piano-public/sdk/ios/packages/consents", .upToNextMajor(from: "1.0.11")),
     ],
     targets: [
         .target(
@@ -24,9 +24,6 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
-            ],
-            swiftSettings: [
-              .define("SPM")
             ]
         ),
         .testTarget(

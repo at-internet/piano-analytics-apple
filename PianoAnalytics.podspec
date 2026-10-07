@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name = 'PianoAnalytics'
-    s.version = '3.1.11'
+    s.version = '3.2.0'
     s.summary = 'Piano Analytics library for Apple devices'
     s.homepage = 'https://github.com/at-internet/piano-analytics-apple'
     s.documentation_url = 'https://developers.atinternet-solutions.com/piano-analytics'
@@ -8,11 +8,11 @@ Pod::Spec.new do |s|
     s.author = 'Piano Analytics'
     s.requires_arc = true
     s.source = { :git => 'https://github.com/at-internet/piano-analytics-apple.git', :tag => s.version}
-    s.dependency 'PianoConsents', ">= 1.0"
+    s.dependency 'PianoConsents', '~> 1.0', '>= 1.0.11'
     s.module_name = 'PianoAnalytics'
-    s.ios.deployment_target = '10.0'
-    s.tvos.deployment_target = '10.0'
-    s.watchos.deployment_target = '3.0'
+    s.ios.deployment_target = '15.0'
+    s.tvos.deployment_target = '15.0'
+    s.watchos.deployment_target = '9.0'
     s.swift_versions = '5'
 
     s.subspec 'iOS' do |d|

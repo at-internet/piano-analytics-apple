@@ -16,6 +16,19 @@ This SDK makes the implementation of Piano Analytics as simple as possible, whil
 
 It also includes [Privacy tagging methods](https://developers.atinternet-solutions.com/piano-analytics/data-collection/privacy) that allow you a perfect management of your tagging depending on the regulation you refer to.
 
+## Requirements
+
+| Platform | Minimum version |
+|---|---|
+| iOS / iOS extensions | 15.0 |
+| tvOS | 15.0 |
+| watchOS | 9.0 |
+| macOS (Swift Package Manager only) | 13.0 |
+
+Swift 5.7+ / Xcode 14+ is required.
+
+> Starting from 3.2.0 the minimum supported versions were raised (previously iOS 10, tvOS 10, watchOS 3). Applications targeting older OS versions should stay on 3.1.x.
+
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -34,22 +47,22 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
 1. Update your Podfile with the according line(s)  
     ```sh
     # iOS Application
-    pod "PianoAnalytics/iOS", ">=3.1"
+    pod "PianoAnalytics/iOS", ">=3.2"
     
     # tvOS Application
-    pod "PianoAnalytics/tvOS", ">=3.1"
+    pod "PianoAnalytics/tvOS", ">=3.2"
     
     # watchOS Application
-    pod "PianoAnalytics/watchOS", ">=3.1"
+    pod "PianoAnalytics/watchOS", ">=3.2"
     
     # iOS Application
-    pod "PianoAnalytics/appExtension", ">=3.1"
+    pod "PianoAnalytics/appExtension", ">=3.2"
     ```
     
     To avoid conflicts caused by [CocoaPods](https://github.com/CocoaPods/CocoaPods/issues/8206), it's possible to use an independent pod:
     ```sh
     target 'MyProject' do
-        pod "PianoAnalytics-AppExtension", ">=3.1"
+        pod "PianoAnalytics-AppExtension", ">=3.2"
         use_frameworks!
     end
     ```
@@ -57,7 +70,7 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
     If you do not have any other pods, your Podfile should look something like:
     ```sh
     target 'MyProject' do
-        pod "PianoAnalytics/iOS", ">=3.1"
+        pod "PianoAnalytics/iOS", ">=3.2"
         use_frameworks!
     end
     ```
@@ -84,7 +97,7 @@ If you are new to Cocoapods, please refer to [CocoaPods documentation](https://g
 
 1. Update the Cartfile with the following line: 
     ```swift
-    github "at-internet/piano-analytics-apple" ~> 3.1
+    github "at-internet/piano-analytics-apple" ~> 3.2
     ```
 2. Save your Cartfile
 

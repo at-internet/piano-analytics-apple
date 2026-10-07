@@ -391,7 +391,7 @@ public final class Configuration {
         var path = Bundle(for: type(of: self)).path(forResource: PA.Configuration.Default, ofType: PA.Configuration.Extension)
         if path == nil {
             // used to access the default.json file with SPM
-            #if SPM
+            #if SWIFT_PACKAGE
             path = Bundle.module.path(forResource: PA.Configuration.Default, ofType: PA.Configuration.Extension)
             #endif
         }
