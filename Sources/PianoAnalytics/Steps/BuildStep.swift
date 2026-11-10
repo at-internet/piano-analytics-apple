@@ -29,9 +29,10 @@ final class BuildStep: Step {
 
     // MARK: Constructors
 
-    static let shared: BuildStep = BuildStep()
+    private final let jsonWritingOptions: JSONSerialization.WritingOptions
 
-    private init() {
+    init(_ jsonWritingOptions: JSONSerialization.WritingOptions = []) {
+        self.jsonWritingOptions = jsonWritingOptions
     }
 
     // MARK: Constants
@@ -61,7 +62,7 @@ final class BuildStep: Step {
         stride(from: 0, to: m.events.count, by: BuildStep.ChunkSize).forEach { i in
             if let chunk = PianoAnalyticsUtils.toJSONData([
                 BuildStep.EventsField: events[i..<min(i + BuildStep.ChunkSize, m.events.count)].map {$0.toMap(context: [:])}
-            ]) {
+            ], options: jsonWritingOptions) {
                 chunks.append(String(decoding: chunk, as: UTF8.self))
             }
         }

@@ -38,7 +38,10 @@ extension PA {
         
         /// Configure HTTP provider
         public var httpProvider: CustomHTTPProvider? = nil
-        
+
+        /// JSON writing options for events serialization
+        public var jsonWritingOptions: JSONSerialization.WritingOptions = []
+
         /// Configuration file location
         internal let configFileLocation: String
         

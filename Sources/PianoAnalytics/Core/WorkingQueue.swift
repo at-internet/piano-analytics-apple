@@ -89,7 +89,7 @@ final class WorkingQueue {
             UsersStep(ps),
             OnBeforeBuildCallStep.shared,
             ps,
-            BuildStep.shared,
+            BuildStep(extendedConfiguration.jsonWritingOptions),
             StorageStep.shared,
             OnBeforeSendCallStep.shared,
             SendStep.shared(extendedConfiguration)

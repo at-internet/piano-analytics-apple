@@ -178,9 +178,9 @@ final class PianoAnalyticsUtils {
 
     // MARK: Parsing methods
 
-    static func toJSONData(_ o: Any) -> Data? {
+    static func toJSONData(_ o: Any, options: JSONSerialization.WritingOptions = []) -> Data? {
         do {
-            return try JSONSerialization.data(withJSONObject: o, options: [])
+            return try JSONSerialization.data(withJSONObject: o, options: options)
         } catch {
            return nil
         }
