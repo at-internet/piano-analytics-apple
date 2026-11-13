@@ -47,7 +47,7 @@ public final class PianoAnalytics {
     // MARK: PUBLIC SECTION
     
     /// SDK version
-    public static let sdkVersion = "3.2.1"
+    public static let sdkVersion = "3.2.2"
 
     /// Send event
     ///
@@ -355,7 +355,7 @@ public final class PianoAnalytics {
                     tempStorageKeys.insert(storageKey)
                 }
             }
-            let privacyModel = PrivacyModel(visitorMode: privacyMode, storageKeys: tempStorageKeys, updateData: PrivacyModel.UpdateDataKey.Storage)
+            let privacyModel = PrivacyModel(visitorMode: privacyMode, forbiddenStorageKeys: tempStorageKeys, updateData: PrivacyModel.UpdateDataKey.Storage)
 
             let m = Model()
             m.privacyModel = privacyModel

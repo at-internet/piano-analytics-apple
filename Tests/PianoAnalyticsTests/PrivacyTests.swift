@@ -319,6 +319,20 @@ class PrivacyTests: XCTestCase {
         return models
     }
 
+    /// Waits until all previously queued operations are processed and returns the current model
+    func getCurrentModel() -> Model {
+        var model = Model()
+        let expectation = self.expectation(description: "Current model")
+
+        self.pa.getModel { m in
+            model = m
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: nil)
+        return model
+    }
+
     func getModeUtils(instance: PianoAnalytics?) -> String {
         var mode: String = ""
         let expectation = self.expectation(description: "Privacy mode")
@@ -1074,6 +1088,228 @@ class PrivacyTests: XCTestCase {
 
         XCTAssertEqual(models["customMode"]?.privacyModel?.visitorMode, nil)
         XCTAssertEqual(models["customMode"]?.privacyModel?.storageKeys, nil)
+    }
+
+        // EXCLUDE STORAGE KEYS
+
+    // "Should remove a correct list of keys from the whitelist without modes"
+    func testPrivacyExcludeStorageKeysWithoutModes() throws {
+        let excludedKeys: Set<String> = [PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]
+
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId])
+
+        let models = getModels(modes: ["optin", "optout", "exempt", "no-consent", "no-storage"])
+
+        XCTAssertEqual(models["optin"]?.privacyModel?.visitorMode, "optin")
+        XCTAssertEqual(models["optin"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptIn.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["optout"]?.privacyModel?.visitorMode, "optout")
+        XCTAssertEqual(models["optout"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptOut.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.visitorMode, "exempt")
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["no-consent"]?.privacyModel?.visitorMode, "no-consent")
+        XCTAssertEqual(models["no-consent"]?.privacyModel?.storageKeys, PA.Privacy.Mode.NoConsent.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["no-storage"]?.privacyModel?.visitorMode, "no-storage")
+        XCTAssertEqual(models["no-storage"]?.privacyModel?.storageKeys, PA.Privacy.Mode.NoStorage.AllowedStorage.subtracting(excludedKeys))
+    }
+    // "Should remove a correct list of keys from the whitelist with modes"
+    func testPrivacyExcludeStorageKeysWithModes() throws {
+        let excludedKeys: Set<String> = [PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]
+
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId], privacyModes: ["optin", "exempt"])
+
+        let models = getModels(modes: ["optin", "exempt", "optout"])
+
+        XCTAssertEqual(models["optin"]?.privacyModel?.visitorMode, "optin")
+        XCTAssertEqual(models["optin"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptIn.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.visitorMode, "exempt")
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["optout"]?.privacyModel?.visitorMode, "optout")
+        XCTAssertEqual(models["optout"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptOut.AllowedStorage)
+    }
+    // "Should remove a correct list of keys from the whitelist with one known mode"
+    func testPrivacyExcludeStorageKeysWithOneMode() throws {
+        let excludedKeys: Set<String> = [PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]
+
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId], privacyModes: ["exempt"])
+
+        let models = getModels(modes: ["optin", "exempt"])
+
+        XCTAssertEqual(models["optin"]?.privacyModel?.visitorMode, "optin")
+        XCTAssertEqual(models["optin"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptIn.AllowedStorage)
+        XCTAssertEqual(models["exempt"]?.privacyModel?.visitorMode, "exempt")
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting(excludedKeys))
+    }
+    // "Should not remove keys from the whitelist with one unknown mode"
+    func testPrivacyExcludeStorageKeysWithOneUnknownMode() throws {
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId], privacyModes: ["customMode"])
+
+        let models = getModels(modes: ["customMode", "exempt"])
+
+        XCTAssertEqual(models["customMode"]?.privacyModel?.visitorMode, nil)
+        XCTAssertEqual(models["customMode"]?.privacyModel?.storageKeys, nil)
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage)
+    }
+    // "Should remove a correct list of keys from the whitelist of a custom mode"
+    func testPrivacyExcludeStorageKeysWithCustomMode() throws {
+        let excludedKeys: Set<String> = [PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId]
+
+        self.pa.privacyCreateMode("custom-mode", visitorConsent: true)
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId], privacyModes: ["custom-mode"])
+
+        let models = getModels(modes: ["custom-mode", "exempt"])
+
+        XCTAssertEqual(models["custom-mode"]?.privacyModel?.visitorMode, "custom-mode")
+        XCTAssertEqual(models["custom-mode"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting(excludedKeys))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage)
+    }
+
+        // EXCLUDE STORAGE KEY
+
+    // "Should remove a correct storage key from the whitelist without modes"
+    func testPrivacyExcludeStorageKeyWithoutModes() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User)
+
+        let models = getModels(modes: ["optin", "optout", "exempt", "no-consent", "no-storage"])
+
+        XCTAssertEqual(models["optin"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptIn.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["optout"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptOut.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["no-consent"]?.privacyModel?.storageKeys, PA.Privacy.Mode.NoConsent.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["no-storage"]?.privacyModel?.storageKeys, PA.Privacy.Mode.NoStorage.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+    }
+    // "Should remove a correct storage key from the whitelist with one known mode"
+    func testPrivacyExcludeStorageKeyWithOneMode() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+
+        let models = getModels(modes: ["optin", "exempt"])
+
+        XCTAssertEqual(models["optin"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptIn.AllowedStorage)
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+    }
+
+        // INCLUDE / EXCLUDE STORAGE KEYS PRECEDENCE
+
+    // "Should apply the last call when including then excluding a key for the same mode"
+    func testPrivacyIncludeThenExcludeStorageKeyForSameMode() throws {
+        self.pa.privacyIncludeStorageKey(PA.Privacy.Storage.Lifecycle, privacyModes: ["exempt"])
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.Lifecycle, privacyModes: ["exempt"])
+
+        let models = getModels(modes: ["exempt"])
+
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage)
+    }
+    // "Should apply the last call when excluding then including a key for the same mode"
+    func testPrivacyExcludeThenIncludeStorageKeyForSameMode() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+        self.pa.privacyIncludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+
+        let models = getModels(modes: ["exempt"])
+
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage)
+    }
+    // "Should keep a key excluded for all modes even if it is included for a specific mode"
+    func testPrivacyExcludeStorageKeyForAllModesWinsOverSpecificModeInclude() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User)
+        self.pa.privacyIncludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+
+        let models = getModels(modes: ["exempt"])
+
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+    }
+    // "Should keep a key excluded for a specific mode even if it is included for all modes"
+    func testPrivacyExcludeStorageKeyForSpecificModeWinsOverAllModesInclude() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+        self.pa.privacyIncludeStorageKey(PA.Privacy.Storage.User)
+
+        let models = getModels(modes: ["optout", "exempt"])
+
+        XCTAssertEqual(models["optout"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptOut.AllowedStorage.union([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage.subtracting([PA.Privacy.Storage.User]))
+    }
+    // "Should restore a key excluded for all modes when it is included for all modes"
+    func testPrivacyExcludeThenIncludeStorageKeyForAllModes() throws {
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User)
+        self.pa.privacyIncludeStorageKey(PA.Privacy.Storage.User)
+
+        let models = getModels(modes: ["optout", "exempt"])
+
+        XCTAssertEqual(models["optout"]?.privacyModel?.storageKeys, PA.Privacy.Mode.OptOut.AllowedStorage.union([PA.Privacy.Storage.User]))
+        XCTAssertEqual(models["exempt"]?.privacyModel?.storageKeys, PA.Privacy.Mode.Exempt.AllowedStorage)
+    }
+
+        // EXCLUDE STORAGE KEYS - STORED DATA
+
+    // "Should clear excluded data when switching to a custom mode and stop storing it" (GitHub issue #35)
+    func testPrivacyExcludeStorageKeysShouldClearDataWhenSwitchingToCustomMode() throws {
+        UserDefaults.standard.set("stored-visitor-id", forKey: VisitorIdKeys.VisitorUUID.rawValue)
+        self.pa.privacySetMode("optin")
+        self.pa.setUser("123", category: "456789", enableStorage: true)
+        XCTAssertEqual(getCurrentModel().storedUser?.id, "123")
+
+        self.pa.privacyCreateMode("custom-mode", visitorConsent: true)
+        self.pa.privacyExcludeStorageKeys([PA.Privacy.Storage.User, PA.Privacy.Storage.VisitorId], privacyModes: ["custom-mode"])
+        self.pa.privacySetMode("custom-mode")
+        let modelAfterSwitch = getCurrentModel()
+
+        XCTAssertEqual(modelAfterSwitch.privacyModel?.visitorMode, "custom-mode")
+        XCTAssertNil(modelAfterSwitch.storedUser)
+        XCTAssertNil(UserDefaults.standard.object(forKey: UserKeys.Users.rawValue))
+        XCTAssertNil(UserDefaults.standard.object(forKey: VisitorIdKeys.VisitorUUID.rawValue))
+
+        self.pa.setUser("456", category: "789", enableStorage: true)
+        let modelAfterSetUser = getCurrentModel()
+
+        XCTAssertEqual(modelAfterSetUser.activeUser?.id, "456")
+        XCTAssertNil(modelAfterSetUser.storedUser)
+        XCTAssertNil(UserDefaults.standard.object(forKey: UserKeys.Users.rawValue))
+    }
+    // "Should clear already stored data when excluding a key for the current mode"
+    func testPrivacyExcludeStorageKeyShouldClearStoredDataForCurrentMode() throws {
+        self.pa.privacySetMode("optin")
+        self.pa.setUser("123", category: "456789", enableStorage: true)
+        XCTAssertEqual(getCurrentModel().storedUser?.id, "123")
+
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["optin"])
+        let model = getCurrentModel()
+
+        XCTAssertEqual(model.privacyModel?.visitorMode, "optin")
+        XCTAssertNil(model.storedUser)
+        XCTAssertNil(UserDefaults.standard.object(forKey: UserKeys.Users.rawValue))
+    }
+    // "Should clear already stored data when excluding a key for all modes"
+    func testPrivacyExcludeStorageKeyForAllModesShouldClearStoredData() throws {
+        self.pa.privacySetMode("optin")
+        self.pa.setUser("123", category: "456789", enableStorage: true)
+        XCTAssertEqual(getCurrentModel().storedUser?.id, "123")
+
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User)
+        let model = getCurrentModel()
+
+        XCTAssertNil(model.storedUser)
+        XCTAssertNil(UserDefaults.standard.object(forKey: UserKeys.Users.rawValue))
+    }
+    // "Should keep stored data when excluding a key for another mode"
+    func testPrivacyExcludeStorageKeyShouldKeepStoredDataForAnotherMode() throws {
+        self.pa.privacySetMode("optin")
+        self.pa.setUser("123", category: "456789", enableStorage: true)
+        XCTAssertEqual(getCurrentModel().storedUser?.id, "123")
+
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.User, privacyModes: ["exempt"])
+        let model = getCurrentModel()
+
+        XCTAssertEqual(model.storedUser?.id, "123")
+        XCTAssertNotNil(UserDefaults.standard.object(forKey: UserKeys.Users.rawValue))
+    }
+    // "Should keep the current privacy mode when excluding the privacy key for the current mode"
+    func testPrivacyExcludePrivacyStorageKeyShouldKeepCurrentMode() throws {
+        self.pa.privacySetMode("optout")
+        XCTAssertEqual(getCurrentModel().privacyModel?.visitorMode, "optout")
+
+        self.pa.privacyExcludeStorageKey(PA.Privacy.Storage.Privacy, privacyModes: ["optout"])
+        let model = getCurrentModel()
+
+        XCTAssertEqual(model.privacyModel?.visitorMode, "optout")
+        XCTAssertEqual(UserDefaults.standard.string(forKey: PrivacyKeys.PrivacyMode.rawValue), "optout")
     }
 
     // EVENT MANAGEMENT

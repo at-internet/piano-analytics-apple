@@ -127,16 +127,15 @@ final class PrivacyStep: Step {
 
     // MARK: Private methods
 
+    /// Forbidden keys take precedence over allowed ones, both for the specific mode and for all modes
     private final func getVisitorModeAuthorizedStorageKey(_ visitorMode: String) -> Set<String> {
-        if modes[visitorMode]?.storage.allowed == nil {
-            let localVariable = modes
-            modes[visitorMode]?.storage.allowed = localVariable[PA.Privacy.Mode.Exempt.Name]?.storage.allowed ?? Set<String>()
-        }
+        let specificModeStorage = modes[visitorMode]?.storage
+        let allModesStorage = modes[PA.Privacy.Mode.All.Name]?.storage
 
-        let authorizedStorageSpecificMode = modes[visitorMode]?.storage.allowed ?? []
-        let authorizedStorageAllModes = modes[PA.Privacy.Mode.All.Name]?.storage.allowed ?? []
+        let allowed = (specificModeStorage?.allowed ?? []).union(allModesStorage?.allowed ?? [])
+        let forbidden = (specificModeStorage?.forbidden ?? []).union(allModesStorage?.forbidden ?? [])
 
-        return authorizedStorageSpecificMode.union(authorizedStorageAllModes)
+        return allowed.subtracting(forbidden)
     }
 
     private final func getVisitorModeAuthorizedEventNames(_ visitorMode: String) -> Set<String> {
@@ -335,13 +334,32 @@ final class PrivacyStep: Step {
     }
 
     private final func clearStorageFromVisitorMode(_ visitorMode: String) {
+        let authorizedStorageKeys = getVisitorModeAuthorizedStorageKey(visitorMode)
+        removeStoredData(Set(PrivacyStep.storageKeysByFeature.keys).subtracting(authorizedStorageKeys))
+    }
+
+    /// Removes data already stored for storage keys that have just been excluded from the current mode
+    private final func clearExcludedStorage(_ excludedStorageKeys: Set<String>, excludedFromMode visitorMode: String) {
+        let currentMode = getVisitorMode()
+        guard visitorMode == PA.Privacy.Mode.All.Name || visitorMode == currentMode else {
+            return
+        }
+
+        // Privacy keys hold the current mode itself, they are always force-written on mode switch
+        let storageKeysToClear = excludedStorageKeys
+            .subtracting(getVisitorModeAuthorizedStorageKey(currentMode))
+            .subtracting([PA.Privacy.Storage.Privacy])
+        removeStoredData(storageKeysToClear)
+    }
+
+    private final func removeStoredData(_ storageKeys: Set<String>) {
+        guard !storageKeys.isEmpty else {
+            return
+        }
+
         let userDefaults = UserDefaults.standard
-        PrivacyStep.storageKeysByFeature.forEach { (entry) in
-            let includeStorage = getVisitorModeAuthorizedStorageKey(visitorMode)
-            if includeStorage.contains(entry.key) {
-                return
-            }
-            entry.value.forEach { (key) in
+        storageKeys.forEach { storageKey in
+            PrivacyStep.storageKeysByFeature[storageKey]?.forEach { key in
                 userDefaults.removeObject(forKey: key)
             }
         }
@@ -450,15 +468,17 @@ final class PrivacyStep: Step {
                 }
             }
         case .Storage:
-            if modes[visitorMode]?.storage.allowed == nil {
-                let localVariable = modes
-                modes[visitorMode]?.storage.allowed = localVariable[PA.Privacy.Mode.Exempt.Name]?.storage.allowed ?? Set<String>()
-            }
+            // Including and excluding the same key for the same mode toggles it: the last call wins
             privacyModel.storageKeys?.forEach { authorizedStorageKey in
                 modes[visitorMode]?.storage.allowed.insert(authorizedStorageKey)
+                modes[visitorMode]?.storage.forbidden.remove(authorizedStorageKey)
             }
-            privacyModel.forbiddenStorageKeys?.forEach { forbiddenStorageKey in
-                modes[visitorMode]?.storage.allowed.remove(forbiddenStorageKey)
+            if let forbiddenStorageKeys = privacyModel.forbiddenStorageKeys, !forbiddenStorageKeys.isEmpty {
+                forbiddenStorageKeys.forEach { forbiddenStorageKey in
+                    modes[visitorMode]?.storage.allowed.remove(forbiddenStorageKey)
+                    modes[visitorMode]?.storage.forbidden.insert(forbiddenStorageKey)
+                }
+                clearExcludedStorage(forbiddenStorageKeys, excludedFromMode: visitorMode)
             }
         default:
             break

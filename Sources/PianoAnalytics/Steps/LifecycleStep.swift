@@ -129,7 +129,8 @@ final class LifecycleStep: Step {
         self.sessionId = UUID().uuidString
         self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
                                         (LifeCycleKeys.FirstSession.rawValue, true),
-                                        (LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue, false),
+                                        (LifeCycleKeys.FirstSessionAfterUpdate.rawValue, false),
+                                        (LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue, nil),
                                         (LifeCycleKeys.SessionCount.rawValue, 1),
                                         (LifeCycleKeys.SessionCountSinceUpdate.rawValue, 1),
                                         (LifeCycleKeys.DaysSinceFirstSession.rawValue, 0),
@@ -158,14 +159,20 @@ final class LifecycleStep: Step {
                                         (LifeCycleKeys.SessionCount.rawValue, ud.integer(forKey: LifeCycleKeys.SessionCount.rawValue) + 1),
                                         (LifeCycleKeys.SessionCountSinceUpdate.rawValue, ud.integer(forKey: LifeCycleKeys.SessionCountSinceUpdate.rawValue) + 1))
 
-        if let currentAppVersion = PianoAnalyticsUtils.applicationInfo?.1,
-           currentAppVersion != ud.string(forKey: LifeCycleKeys.LastApplicationVersion.rawValue) {
-            self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
-                                        (LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue, now),
-                                        (LifeCycleKeys.LastApplicationVersion.rawValue, currentAppVersion),
-                                        (LifeCycleKeys.SessionCountSinceUpdate.rawValue, 1),
-                                        (LifeCycleKeys.DaysSinceUpdate.rawValue, 0),
-                                        (LifeCycleKeys.FirstSessionAfterUpdate.rawValue, true))
+        if let currentAppVersion = PianoAnalyticsUtils.applicationInfo?.1 {
+            let lastAppVersion = ud.string(forKey: LifeCycleKeys.LastApplicationVersion.rawValue)
+            if lastAppVersion == nil {
+                // Previous version is unknown (e.g. lifecycle storage was cleared), so this is not an update
+                self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
+                                            (LifeCycleKeys.LastApplicationVersion.rawValue, currentAppVersion))
+            } else if currentAppVersion != lastAppVersion {
+                self.privacyStep.storeData(PA.Privacy.Storage.Lifecycle, pairs:
+                                            (LifeCycleKeys.FirstSessionDateAfterUpdate.rawValue, now),
+                                            (LifeCycleKeys.LastApplicationVersion.rawValue, currentAppVersion),
+                                            (LifeCycleKeys.SessionCountSinceUpdate.rawValue, 1),
+                                            (LifeCycleKeys.DaysSinceUpdate.rawValue, 0),
+                                            (LifeCycleKeys.FirstSessionAfterUpdate.rawValue, true))
+            }
         }
 
         self.sessionId = UUID().uuidString
@@ -179,12 +186,17 @@ final class LifecycleStep: Step {
         guard let date = self.timeBackgroundStarted else {
             return
         }
+        self.timeBackgroundStarted = nil
+
+        // Lifecycle is not initialized yet (application launch, or storage cleared by a privacy mode switch):
+        // the next event initializes it and starts the session, starting one here would count it twice
+        guard UserDefaults.standard.bool(forKey: LifeCycleKeys.InitLifecycleDone.rawValue) else {
+            return
+        }
 
         if let sbd = self.sessionBackgroundDuration, PianoAnalyticsUtils.secondsBetweenDates(date, toDate: Date()) > sbd {
             self.newSessionInit()
         }
-
-        self.timeBackgroundStarted = nil
     }
 
     private final func getProperties() -> [String: ContextProperty] {
